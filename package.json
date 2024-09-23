@@ -24,10 +24,11 @@
       "prettier --write"
     ],
     "*.{js,ts}": "vitest related --run",
-    "*.{vue,js,ts}": "npx playwright test"
+    "*.{vue,js,ts}": "npx playwright test tests/e2e"
   },
   "dependencies": {
     "@nuxt/eslint": "^0.5.7",
+    "@nuxt/ui": "^2.18.5",
     "nuxt": "^3.13.0",
     "vue": "latest",
     "vue-router": "latest"
