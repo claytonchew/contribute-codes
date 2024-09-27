@@ -25,7 +25,7 @@ export class SMTPService implements EmailService {
 
     if (!to) throw new Error("Email 'to' is required");
 
-    if (!text && !html) throw new Error("Email 'text' or 'html' is required");
+    if (!text || !html) throw new Error("Email 'text' or 'html' is required");
 
     const message = new Message({
       from: emailOptions.from || useRuntimeConfig().smtp.fromEmail,
@@ -36,7 +36,7 @@ export class SMTPService implements EmailService {
       to,
       subject,
       text,
-      attachment: [{ data: html, alternative: true }],
+      attachment: html ? [{ data: html, alternative: true }] : undefined,
     });
 
     const { isValid, validationError } = message.checkValidity();
