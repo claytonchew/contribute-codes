@@ -8,7 +8,12 @@ export default defineNuxtConfig({
 
   devtools: { enabled: true },
 
-  modules: ["@nuxt/eslint", "@nuxt/test-utils/module", "@nuxt/ui"],
+  modules: [
+    "@nuxt/eslint",
+    "@nuxt/test-utils/module",
+    "@nuxt/ui",
+    "nuxt-auth-utils",
+  ],
 
   runtimeConfig: {
     session: {

@@ -1,5 +1,5 @@
 class AuthService {
-  async linkOauthAccount(
+  async linkOAuthAccount(
     userId: string,
     providerId: string,
     providerUserId: string,
@@ -12,6 +12,7 @@ class AuthService {
           providerId,
           providerUserId,
         })
+        .onConflictDoNothing()
         .returning()
         .get();
 

@@ -1,5 +1,4 @@
 import { eq } from "drizzle-orm";
-import type { InferInsertModel } from "drizzle-orm";
 
 class UserService {
   async getById(id: string) {
@@ -54,7 +53,18 @@ class UserService {
     }
   }
 
-  async updateById(id: string, data: InferInsertModel<typeof tables.user>) {
+  async updateById(
+    id: string,
+    data: {
+      name?: string;
+      email?: string;
+      id?: string;
+      createdAt?: Date;
+      updatedAt?: Date;
+      avatar?: string | null;
+      bannedAt?: Date | null;
+    },
+  ) {
     try {
       const user = await useDB()
         .update(tables.user)
