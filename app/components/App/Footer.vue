@@ -21,12 +21,12 @@
         <div
           class="mt-3 flex items-center justify-center gap-x-1.5 lg:order-1 lg:mt-0 lg:flex-1 lg:justify-start">
           <span class="text-center text-sm text-gray-500 dark:text-gray-400">
-            © contribute.codes {{ new Date().getFullYear() }} by
+            © contribute.codes {{ new Date().getFullYear() }}, made by
             <ULink
               to="https://github.com/claytonchew"
               class="hover:text-primary underline underline-offset-4"
               target="_blank">
-              claytonchew</ULink
+              @claytonchew</ULink
             >. Check out the
             <ULink
               to="https://github.com/claytonchew/contribute-codes"
