@@ -13,7 +13,21 @@ export default defineNuxtConfig({
     "@nuxt/test-utils/module",
     "@nuxt/ui",
     "nuxt-auth-utils",
+    "@nuxt/content",
+    "@nuxt/fonts",
+    "@nuxt/image",
   ],
+
+  app: {
+    pageTransition: { name: "page", mode: "out-in" },
+    layoutTransition: { name: "layout", mode: "out-in" },
+  },
+
+  content: {
+    markdown: {
+      anchorLinks: false,
+    },
+  },
 
   runtimeConfig: {
     session: {
