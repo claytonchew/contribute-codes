@@ -1,6 +1,12 @@
-import { eq } from "drizzle-orm";
+import { eq, type InferInsertModel } from "drizzle-orm";
 
 class UserService {
+  /**
+   * Fetches a user by its id.
+   *
+   * @param id - user id
+   * @returns user | null
+   */
   async getById(id: string) {
     try {
       const user = await useDB()
@@ -17,6 +23,12 @@ class UserService {
     }
   }
 
+  /**
+   * Fetches a user by its email.
+   *
+   * @param email - user email
+   * @returns user | null
+   */
   async getByEmail(email: string) {
     try {
       const user = await useDB()
@@ -33,6 +45,12 @@ class UserService {
     }
   }
 
+  /**
+   * Creates a new user.
+   *
+   * @param data - user data
+   * @returns user | null
+   */
   async create(data: {
     name: string;
     email: string;
@@ -53,22 +71,24 @@ class UserService {
     }
   }
 
-  async updateById(
+  /**
+   * Updates a user by its id.
+   *
+   * @param id - user id
+   * @param data - user data
+   * @returns user | null
+   */
+  async update(
     id: string,
-    data: {
-      name?: string;
-      email?: string;
-      id?: string;
-      createdAt?: Date;
-      updatedAt?: Date;
-      avatar?: string | null;
-      bannedAt?: Date | null;
-    },
+    data: Partial<InferInsertModel<typeof tables.user>>,
   ) {
     try {
       const user = await useDB()
         .update(tables.user)
-        .set(data)
+        .set({
+          ...data,
+          id,
+        })
         .where(eq(tables.user.id, id))
         .returning()
         .get();

@@ -8,6 +8,13 @@
       "when": 1727191894490,
       "tag": "0000_curly_felicia_hardy",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1727619167256,
+      "tag": "0001_common_power_pack",
+      "breakpoints": true
     }
   ]
 }

@@ -18,7 +18,8 @@
     "test:e2e": "npx playwright test",
     "test:e2e:ui": "npx playwright test --ui",
     "db:generate": "drizzle-kit generate",
-    "db:deploy": "drizzle-kit push"
+    "db:deploy": "drizzle-kit push --verbose --strict",
+    "db:seed": "npx tsx --env-file=./.env ./server/database/seed.ts"
   },
   "lint-staged": {
     "**/*.{js,jsx,cjs,mjs,json,ts,tsx,html,css,json,vue}": [

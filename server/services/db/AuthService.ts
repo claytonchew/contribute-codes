@@ -1,7 +1,15 @@
 class AuthService {
+  /**
+   * Link OAuth account to user
+   *
+   * @param userId
+   * @param providerId
+   * @param providerUserId
+   * @returns oauthAccount | null
+   */
   async linkOAuthAccount(
     userId: string,
-    providerId: string,
+    providerId: "github",
     providerUserId: string,
   ) {
     try {

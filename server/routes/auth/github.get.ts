@@ -6,7 +6,13 @@ export default oauthGitHubEventHandler({
     emailRequired: true,
   },
   async onSuccess(event, { user }) {
-    const oauthAccount = {
+    const oauthAccount: {
+      name: string;
+      email: string;
+      avatar: string | null;
+      providerId: "github";
+      providerUserId: string;
+    } = {
       name: user.name,
       email: user.email,
       avatar: user.avatar_url,
@@ -38,7 +44,7 @@ async function handleOAuthLogin(oauthAccount: {
   name: string;
   email: string;
   avatar: string | null;
-  providerId: string;
+  providerId: "github";
   providerUserId: string;
 }) {
   let user = await userService.getByEmail(oauthAccount.email);
@@ -50,7 +56,7 @@ async function handleOAuthLogin(oauthAccount: {
       avatar: oauthAccount.avatar,
     });
   } else if (!user.avatar) {
-    user = await userService.updateById(user.id, {
+    user = await userService.update(user.id, {
       avatar: oauthAccount.avatar,
     });
   }
