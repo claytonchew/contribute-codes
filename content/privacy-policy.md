@@ -39,4 +39,4 @@ Our website may contain links to third-party sites (e.g., repositories or extern
 
 ## 7. Changes to this Policy
 
-We may update this Privacy Policy from time to time. When we do, we will post the updated version on this page.
+We may update this Privacy Policy from time to time. Your continued use of the website after changes are made indicates your acceptance of the revised policy.
