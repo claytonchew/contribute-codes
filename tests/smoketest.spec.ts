@@ -1,7 +1,7 @@
-import { describe, test, expect } from "vitest";
+import { describe, it, expect } from "vitest";
 
 describe("smoke test", () => {
-  test("smoke test", async () => {
+  it("should pass smoke test", async () => {
     expect(true).toBe(true);
   });
 });
