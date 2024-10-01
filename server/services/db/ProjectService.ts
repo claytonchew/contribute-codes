@@ -76,21 +76,20 @@ class ProjectService {
   }
 
   /**
-   * Fetches all projects with pagination, sorting, and filtering
+   * Fetches all projects with pagination, sorting, and filtering.
    *
-   * Note: This method does not fetch the `content` and `contributors` of the projects
+   * Note: This method does not fetch the `content` and `contributors` of the projects.
    *
-   * @param pageOptions - page and perPage
-   * @param sort - newest or oldest
-   * @param filters - skill and/or ownerId
-   * @returns projects with pagination
+   * @param options - object containing pageOptions, sort, and filters
+   * @param options.pageOptions - pagination options including page and perPage
+   * @param options.sort - sorting order, either "newest" or "oldest"
+   * @param options.filters - filtering options including skill and/or ownerId
+   * @returns object containing data (list of projects) and pagination details
    */
-  async getAll(
-    pageOptions?: { page?: number | null; perPage?: number | null } | null,
-    sort?: "newest" | "oldest" | null,
-    filters?: { skill?: string; ownerId?: string } | null,
-  ) {
+  async getAll(options: ProjectGetAllOptions = {}) {
     try {
+      const { pageOptions, sort, filters } = options;
+
       let { page = 1, perPage = 20 } = pageOptions || {};
       page = Math.max(page || 1, 1);
       perPage = Math.max(perPage || 20, 1);
@@ -217,6 +216,60 @@ class ProjectService {
   }
 
   /**
+   * Fetches all skills of a project by its id.
+   *
+   * @param id - project id
+   * @returns list of skills
+   */
+  async getSkillsById(id: string) {
+    try {
+      const skills = await useDB()
+        .select({
+          skill: tables.projectSkill.skill,
+        })
+        .from(tables.projectSkill)
+        .where(eq(tables.projectSkill.projectId, id))
+        .all();
+
+      return skills.map((row) => row.skill);
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error(error);
+      return null;
+    }
+  }
+
+  /**
+   * Fetches all contributors of a project by its id.
+   *
+   * @param id - project id
+   * @returns list of contributors
+   */
+  async getContributorsById(id: string) {
+    try {
+      const contributors = await useDB()
+        .select({
+          id: tables.user.id,
+          name: tables.user.name,
+          avatar: tables.user.avatar,
+        })
+        .from(tables.projectContributor)
+        .where(eq(tables.projectContributor.projectId, id))
+        .innerJoin(
+          tables.user,
+          eq(tables.user.id, tables.projectContributor.userId),
+        )
+        .all();
+
+      return contributors;
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error(error);
+      return null;
+    }
+  }
+
+  /**
    * Create a new project
    *
    * @param data - project data
@@ -278,14 +331,17 @@ class ProjectService {
   async updateSkills(id: string, skills: string[]) {
     try {
       await useDB().transaction(async (tx) => {
+        // remove existing skills
+        await tx
+          .delete(tables.projectSkill)
+          .where(eq(tables.projectSkill.projectId, id));
+
+        // insert new skills
         for (const skill of skills) {
-          await tx
-            .insert(tables.projectSkill)
-            .values({
-              projectId: id,
-              skill,
-            })
-            .onConflictDoNothing();
+          await tx.insert(tables.projectSkill).values({
+            projectId: id,
+            skill,
+          });
         }
       });
 
@@ -307,14 +363,17 @@ class ProjectService {
   async updateContributors(id: string, contributors: string[]) {
     try {
       await useDB().transaction(async (tx) => {
+        // remove existing contributors
+        await tx
+          .delete(tables.projectContributor)
+          .where(eq(tables.projectContributor.projectId, id));
+
+        // insert new contributors
         for (const userId of contributors) {
-          await tx
-            .insert(tables.projectContributor)
-            .values({
-              projectId: id,
-              userId,
-            })
-            .onConflictDoNothing();
+          await tx.insert(tables.projectContributor).values({
+            projectId: id,
+            userId,
+          });
         }
       });
 
@@ -325,6 +384,57 @@ class ProjectService {
       return false;
     }
   }
+
+  /**
+   * Delete a project
+   *
+   * @param id - project id
+   * @returns boolean
+   */
+  async delete(id: string) {
+    try {
+      await useDB().delete(tables.project).where(eq(tables.project.id, id));
+
+      return true;
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error(error);
+      return false;
+    }
+  }
+
+  /**
+   * Check if a user is the owner of a project
+   *
+   * @param id - project id
+   * @param userId - user id
+   * @returns boolean
+   */
+  async isOwner(id: string, userId: string) {
+    try {
+      const project = await useDB()
+        .select({
+          id: tables.project.id,
+        })
+        .from(tables.project)
+        .where(
+          and(eq(tables.project.id, id), eq(tables.project.ownerId, userId)),
+        )
+        .get();
+
+      return !!project;
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error(error);
+      return false;
+    }
+  }
+}
+
+export interface ProjectGetAllOptions {
+  pageOptions?: { page?: number | null; perPage?: number | null } | null;
+  sort?: "newest" | "oldest" | null;
+  filters?: { skill?: string; ownerId?: string } | null;
 }
 
 export const projectService = new ProjectService();

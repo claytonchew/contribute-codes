@@ -43,7 +43,8 @@
     "nuxt": "^3.13.0",
     "nuxt-auth-utils": "^0.3.9",
     "vue": "latest",
-    "vue-router": "latest"
+    "vue-router": "latest",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.5.0",
