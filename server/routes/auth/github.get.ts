@@ -1,5 +1,6 @@
 import { userService } from "~~/server/services/db/UserService";
 import { authService } from "~~/server/services/db/AuthService";
+import { sanitizeUser } from "~~/server/utils/auth";
 
 export default oauthGitHubEventHandler({
   config: {
@@ -29,7 +30,7 @@ export default oauthGitHubEventHandler({
       });
     }
 
-    await setUserSession(event, { user: dbUser ?? undefined });
+    await setUserSession(event, { user: sanitizeUser(dbUser) ?? undefined });
 
     return sendRedirect(event, "/");
   },
