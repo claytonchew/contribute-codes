@@ -14,13 +14,7 @@ type ResponseResult<T> = {
   pagination?: PaginationObject;
 };
 
-type RawResponseResult<T> =
-  | {
-      data: T;
-      [key: string]: unknown;
-    }
-  | T
-  | null;
+type RawResponseResult<T> = T | null;
 
 type PaginationObject = {
   page: number;
