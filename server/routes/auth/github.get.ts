@@ -30,9 +30,14 @@ export default oauthGitHubEventHandler({
       });
     }
 
+    // set the user session after successful login
     await setUserSession(event, { user: sanitizeUser(dbUser) ?? undefined });
 
-    return sendRedirect(event, "/");
+    // obtain the redirect path from the cookie and delete it
+    const redirectPath = getCookie(event, `redirect-path`);
+    deleteCookie(event, "redirect-path");
+
+    return sendRedirect(event, redirectPath || "/");
   },
   onError(event, error) {
     // eslint-disable-next-line no-console

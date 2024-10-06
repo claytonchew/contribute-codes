@@ -35,6 +35,7 @@
             v-if="!loggedIn"
             label="Sign in with GitHub"
             path="/auth/github"
+            :redirect-path="useRoute().path"
             icon="simple-icons:github"
             class="hidden lg:inline-flex" />
           <AuthProfileDropdown

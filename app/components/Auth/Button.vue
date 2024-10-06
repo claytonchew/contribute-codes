@@ -26,6 +26,10 @@ const props = defineProps({
     type: String,
     required: true,
   },
+  redirectPath: {
+    type: String,
+    default: "/",
+  },
   icon: {
     type: String,
     required: true,
@@ -42,6 +46,10 @@ const props = defineProps({
 
 const open = () => {
   loading.value = true;
+
+  // save the current path to redirect back to it after authentication
+  useCookie("redirect-path").value = props.redirectPath;
+
   window.location.href = props.path;
 };
 </script>
