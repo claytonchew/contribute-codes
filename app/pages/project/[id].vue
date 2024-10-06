@@ -14,13 +14,21 @@
             Explore other projects
           </UButton>
         </div>
+
+        <UButton
+          v-if="isOwner"
+          icon="heroicons:pencil-square"
+          label="Edit"
+          variant="ghost"
+          size="sm"
+          square />
       </div>
 
       <section>
-        <h1 class="text-2xl font-semibold">{{ data.title }}</h1>
+        <h1 class="text-2xl font-semibold">{{ data?.title }}</h1>
         <UDivider class="py-4" />
         <ContentRendererMarkdown
-          :value="data.content"
+          :value="data?.content"
           class="prose-sm dark:prose-invert prose-ul:list-disc prose-ol:list-decimal !max-w-none" />
       </section>
     </div>
@@ -35,66 +43,63 @@
           </span>
           <div class="flex items-center">
             <UAvatar
-              :src="data.owner.avatar"
-              :alt="data.owner.name"
+              :src="data?.owner?.avatar || undefined"
+              :alt="data?.owner?.name"
               size="xs"
               class="mr-2" />
-            <span class="text-sm font-medium">{{ data.owner.name }}</span>
+            <span class="text-sm font-medium">{{ data?.owner?.name }}</span>
           </div>
         </div>
-        <div>
+        <div v-if="data?.createdAt">
           <span
             class="mb-1 block text-xs font-medium text-gray-500 dark:text-gray-400">
             Published At
           </span>
           <span class="text-sm font-medium">{{
-            new Date(data.createdAt).toLocaleDateString("en", {
+            new Date(data?.createdAt).toLocaleDateString("en", {
               day: "numeric",
               month: "short",
               year: "numeric",
             })
           }}</span>
         </div>
-        <div v-if="data.repositoryUrl">
+        <div v-if="data?.repositoryUrl">
           <span
             class="mb-1 block text-xs font-medium text-gray-500 dark:text-gray-400">
             Repository
           </span>
-          <UButton
-            :to="data.repositoryUrl"
-            variant="link"
-            color="black"
-            :padded="false"
-            size="sm">
-            {{ data.repositoryUrl }}
-          </UButton>
+          <RepositoryLink :url="data?.repositoryUrl" />
         </div>
-        <div v-if="data.projectUrl">
+        <div v-if="data?.projectUrl">
           <span
             class="mb-1 block text-xs font-medium text-gray-500 dark:text-gray-400">
             Project Site
           </span>
           <UButton
-            :to="data.projectUrl"
+            :to="data?.projectUrl"
             variant="link"
             color="black"
             :padded="false"
             size="sm">
-            {{ data.projectUrl }}
+            {{ stripURLScheme(data?.projectUrl) }}
           </UButton>
         </div>
       </div>
 
-      <div class="space-y-2">
-        <UButton color="white" size="lg" block> Share Project </UButton>
-        <UButton color="black" size="lg" block> Volunter this project </UButton>
-      </div>
-
-      <div v-if="data.skills.length > 0" class="space-y-2">
-        <span class="block text-sm font-medium"> Skills Wanted </span>
+      <div v-if="(data?.skills || []).length > 0" class="space-y-2">
+        <div class="flex justify-between">
+          <span class="block text-sm font-medium"> Skills Wanted </span>
+          <UButton
+            v-if="isOwner"
+            icon="heroicons:pencil-square"
+            label="Edit"
+            variant="ghost"
+            size="xs"
+            square />
+        </div>
         <div class="flex flex-wrap gap-2">
           <UBadge
-            v-for="skill in data.skills"
+            v-for="skill in data?.skills"
             :key="skill"
             color="white"
             :ui="{ rounded: 'rounded-full' }">
@@ -103,20 +108,41 @@
         </div>
       </div>
 
-      <div v-if="data.contributors.length > 0" class="space-y-2">
-        <span class="block text-sm font-medium"> Contributors </span>
+      <div
+        v-if="(data?.contributors || []).length > 0 || isOwner"
+        class="space-y-2">
+        <div class="flex justify-between">
+          <span class="block text-sm font-medium"> Contributors </span>
+          <UButton
+            v-if="isOwner"
+            icon="heroicons:pencil-square"
+            label="Edit"
+            variant="ghost"
+            size="xs"
+            square />
+        </div>
         <div class="flex flex-wrap gap-2">
+          <ULink v-if="isOwner">
+            <UAvatar v-if="data?.owner" alt="+" size="lg" />
+          </ULink>
           <UTooltip
-            v-for="contributor in data.contributors"
+            v-for="contributor in data?.contributors"
             :key="contributor.id"
             :text="contributor.name"
             :popper="{ arrow: true, placement: 'top' }">
             <UAvatar
-              :src="contributor.avatar"
+              :src="contributor?.avatar || undefined"
               :alt="contributor.name"
               size="lg" />
           </UTooltip>
         </div>
+      </div>
+
+      <div class="space-y-2">
+        <UButton color="white" size="lg" block> Share Project </UButton>
+        <UButton v-if="!isOwner" color="black" size="lg" block>
+          Volunteer this project
+        </UButton>
       </div>
     </aside>
   </UContainer>
@@ -139,6 +165,10 @@ const { data } = await useAsyncData(() =>
 );
 
 useSeoMeta({
-  title: data.value.title,
+  title: data.value?.title,
+});
+
+const isOwner = computed(() => {
+  return data.value?.owner?.id === useUserSession().user.value?.id;
 });
 </script>
