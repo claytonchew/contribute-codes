@@ -25,7 +25,7 @@ export class SMTPService implements EmailService {
 
     if (!to) throw new Error("Email 'to' is required");
 
-    if (!text || !html) throw new Error("Email 'text' or 'html' is required");
+    if (!text && !html) throw new Error("Email 'text' or 'html' is required");
 
     const message = new Message({
       from: emailOptions.from || useRuntimeConfig().smtp.fromEmail,
