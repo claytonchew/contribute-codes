@@ -1,23 +1,43 @@
-import type { EmailService, EmailOptions } from "./Email";
-import { SMTPClient, Message } from "emailjs";
+import type {
+  EmailService,
+  EmailOptions,
+} from "~~/server/services/email/Email";
+import { SMTPClient, type SMTPConnectionOptions, Message } from "emailjs";
 
 export class SMTPService implements EmailService {
   private smtpClient: SMTPClient;
+  private smtpConnectionOptions: Partial<
+    SMTPConnectionOptions & {
+      fromEmail: string;
+      replyToEmail: string;
+    }
+  >;
 
   constructor() {
-    const { smtp } = useRuntimeConfig();
+    this.smtpConnectionOptions = {
+      host: process.env.SMTP_HOST,
+      // transpose smtp.port to number if it's a string
+      port: process.env.SMTP_PORT ? parseInt(process.env.SMTP_PORT) : 587,
+      user: process.env.SMTP_USER,
+      password: process.env.SMTP_PASS,
+      fromEmail: process.env.SMTP_FROM_EMAIL,
+      replyToEmail:
+        process.env.SMTP_REPLY_TO_EMAIL || process.env.SMTP_FROM_EMAIL,
+      // evaluate string as bool
+      tls: process.env.SMTP_TLS === "true",
+    };
 
-    if (!smtp || !smtp.host || !smtp.port || !smtp.user || !smtp.password) {
+    if (
+      !this.smtpConnectionOptions ||
+      !this.smtpConnectionOptions.host ||
+      !this.smtpConnectionOptions.port ||
+      !this.smtpConnectionOptions.user ||
+      !this.smtpConnectionOptions.password
+    ) {
       throw new Error("SMTP configuration is missing");
     }
 
-    this.smtpClient = new SMTPClient({
-      ...smtp,
-      // evaluate string if it's a string
-      tls: typeof smtp.tls === "string" ? smtp.tls === "true" : smtp.tls,
-      // transpose smtp.port to number if it's a string
-      port: typeof smtp.port === "string" ? parseInt(smtp.port) : smtp.port,
-    });
+    this.smtpClient = new SMTPClient(this.smtpConnectionOptions);
   }
 
   async send(emailOptions: EmailOptions): Promise<void> {
@@ -28,10 +48,12 @@ export class SMTPService implements EmailService {
     if (!text && !html) throw new Error("Email 'text' or 'html' is required");
 
     const message = new Message({
-      from: emailOptions.from || useRuntimeConfig().smtp.fromEmail,
+      from: emailOptions.from || this.smtpConnectionOptions.fromEmail,
       "reply-to":
         emailOptions.replyTo ||
-        useRuntimeConfig().smtp.replyToEmail ||
+        emailOptions.from ||
+        this.smtpConnectionOptions.replyToEmail ||
+        this.smtpConnectionOptions.fromEmail ||
         undefined,
       to,
       subject,
