@@ -19,25 +19,28 @@ class ProjectService {
     try {
       const projectData = await useDB()
         .select({
-          project: tables.project,
+          project: tables.project.project,
           owner: {
-            id: tables.user.id,
-            name: tables.user.name,
-            avatar: tables.user.avatar,
+            id: tables.user.user.id,
+            name: tables.user.user.name,
+            avatar: tables.user.user.avatar,
           },
           skills:
-            sql<string>`GROUP_CONCAT(${tables.projectSkill.skill}, '__,__')`.as(
+            sql<string>`GROUP_CONCAT(${tables.project.projectSkill.skill}, '__,__')`.as(
               "skills",
             ),
         })
-        .from(tables.project)
-        .where(eq(tables.project.id, id))
-        .innerJoin(tables.user, eq(tables.user.id, tables.project.ownerId))
-        .leftJoin(
-          tables.projectSkill,
-          eq(tables.projectSkill.projectId, tables.project.id),
+        .from(tables.project.project)
+        .where(eq(tables.project.project.id, id))
+        .innerJoin(
+          tables.user.user,
+          eq(tables.user.user.id, tables.project.project.ownerId),
         )
-        .groupBy(tables.project.id)
+        .leftJoin(
+          tables.project.projectSkill,
+          eq(tables.project.projectSkill.projectId, tables.project.project.id),
+        )
+        .groupBy(tables.project.project.id)
         .get();
 
       // if no project found, return null
@@ -47,15 +50,15 @@ class ProjectService {
 
       const contributorsData = await useDB()
         .select({
-          id: tables.user.id,
-          name: tables.user.name,
-          avatar: tables.user.avatar,
+          id: tables.user.user.id,
+          name: tables.user.user.name,
+          avatar: tables.user.user.avatar,
         })
-        .from(tables.projectContributor)
-        .where(eq(tables.projectContributor.projectId, id))
+        .from(tables.project.projectContributor)
+        .where(eq(tables.project.projectContributor.projectId, id))
         .innerJoin(
-          tables.user,
-          eq(tables.user.id, tables.projectContributor.userId),
+          tables.user.user,
+          eq(tables.user.user.id, tables.project.projectContributor.userId),
         )
         .all();
 
@@ -99,36 +102,39 @@ class ProjectService {
       // fetch projects (exclude content) with owner and skills
       let query = useDB()
         .select({
-          id: tables.project.id,
-          createdAt: tables.project.createdAt,
-          updatedAt: tables.project.updatedAt,
-          title: tables.project.title,
-          snippet: tables.project.snippet,
-          repositoryUrl: tables.project.repositoryUrl,
-          projectUrl: tables.project.projectUrl,
+          id: tables.project.project.id,
+          createdAt: tables.project.project.createdAt,
+          updatedAt: tables.project.project.updatedAt,
+          title: tables.project.project.title,
+          snippet: tables.project.project.snippet,
+          repositoryUrl: tables.project.project.repositoryUrl,
+          projectUrl: tables.project.project.projectUrl,
           owner: {
-            id: tables.user.id,
-            name: tables.user.name,
-            avatar: tables.user.avatar,
+            id: tables.user.user.id,
+            name: tables.user.user.name,
+            avatar: tables.user.user.avatar,
           },
           skills:
-            sql<string>`GROUP_CONCAT(${tables.projectSkill.skill}, '__,__')`.as(
+            sql<string>`GROUP_CONCAT(${tables.project.projectSkill.skill}, '__,__')`.as(
               "skills",
             ),
         })
-        .from(tables.project)
-        .innerJoin(tables.user, eq(tables.user.id, tables.project.ownerId))
-        .leftJoin(
-          tables.projectSkill,
-          eq(tables.projectSkill.projectId, tables.project.id),
+        .from(tables.project.project)
+        .innerJoin(
+          tables.user.user,
+          eq(tables.user.user.id, tables.project.project.ownerId),
         )
-        .groupBy(tables.project.id)
+        .leftJoin(
+          tables.project.projectSkill,
+          eq(tables.project.projectSkill.projectId, tables.project.project.id),
+        )
+        .groupBy(tables.project.project.id)
         .$dynamic();
 
       query =
         sort === "oldest"
-          ? query.orderBy(asc(tables.project.createdAt))
-          : query.orderBy(desc(tables.project.createdAt)); // default to newest
+          ? query.orderBy(asc(tables.project.project.createdAt))
+          : query.orderBy(desc(tables.project.project.createdAt)); // default to newest
 
       // apply filters
       if (filters?.skill || filters?.ownerId) {
@@ -138,18 +144,21 @@ class ProjectService {
             exists(
               useDB()
                 .select()
-                .from(tables.projectSkill)
+                .from(tables.project.projectSkill)
                 .where(
                   and(
-                    eq(tables.projectSkill.projectId, tables.project.id),
-                    eq(tables.projectSkill.skill, filters.skill),
+                    eq(
+                      tables.project.projectSkill.projectId,
+                      tables.project.project.id,
+                    ),
+                    eq(tables.project.projectSkill.skill, filters.skill),
                   ),
                 ),
             ),
           );
         }
         if (filters.ownerId) {
-          conditions.push(eq(tables.project.ownerId, filters.ownerId));
+          conditions.push(eq(tables.project.project.ownerId, filters.ownerId));
         }
         query = query.where(and(...conditions));
       }
@@ -159,12 +168,14 @@ class ProjectService {
       // get total count of projects
       let totalCountQuery = useDB()
         .select({
-          count: sql<number>`COUNT(DISTINCT ${tables.project.id})`.as("count"),
+          count: sql<number>`COUNT(DISTINCT ${tables.project.project.id})`.as(
+            "count",
+          ),
         })
-        .from(tables.project)
+        .from(tables.project.project)
         .leftJoin(
-          tables.projectSkill,
-          eq(tables.projectSkill.projectId, tables.project.id),
+          tables.project.projectSkill,
+          eq(tables.project.projectSkill.projectId, tables.project.project.id),
         )
         .$dynamic();
 
@@ -176,18 +187,21 @@ class ProjectService {
             exists(
               useDB()
                 .select()
-                .from(tables.projectSkill)
+                .from(tables.project.projectSkill)
                 .where(
                   and(
-                    eq(tables.projectSkill.projectId, tables.project.id),
-                    eq(tables.projectSkill.skill, filters.skill),
+                    eq(
+                      tables.project.projectSkill.projectId,
+                      tables.project.project.id,
+                    ),
+                    eq(tables.project.projectSkill.skill, filters.skill),
                   ),
                 ),
             ),
           );
         }
         if (filters.ownerId) {
-          conditions.push(eq(tables.project.ownerId, filters.ownerId));
+          conditions.push(eq(tables.project.project.ownerId, filters.ownerId));
         }
         totalCountQuery = totalCountQuery.where(and(...conditions));
       }
@@ -225,10 +239,10 @@ class ProjectService {
     try {
       const skills = await useDB()
         .select({
-          skill: tables.projectSkill.skill,
+          skill: tables.project.projectSkill.skill,
         })
-        .from(tables.projectSkill)
-        .where(eq(tables.projectSkill.projectId, id))
+        .from(tables.project.projectSkill)
+        .where(eq(tables.project.projectSkill.projectId, id))
         .all();
 
       return skills.map((row) => row.skill);
@@ -249,15 +263,15 @@ class ProjectService {
     try {
       const contributors = await useDB()
         .select({
-          id: tables.user.id,
-          name: tables.user.name,
-          avatar: tables.user.avatar,
+          id: tables.user.user.id,
+          name: tables.user.user.name,
+          avatar: tables.user.user.avatar,
         })
-        .from(tables.projectContributor)
-        .where(eq(tables.projectContributor.projectId, id))
+        .from(tables.project.projectContributor)
+        .where(eq(tables.project.projectContributor.projectId, id))
         .innerJoin(
-          tables.user,
-          eq(tables.user.id, tables.projectContributor.userId),
+          tables.user.user,
+          eq(tables.user.user.id, tables.project.projectContributor.userId),
         )
         .all();
 
@@ -275,10 +289,10 @@ class ProjectService {
    * @param data - project data
    * @returns project | null
    */
-  async create(data: InferInsertModel<typeof tables.project>) {
+  async create(data: InferInsertModel<typeof tables.project.project>) {
     try {
       const project = await useDB()
-        .insert(tables.project)
+        .insert(tables.project.project)
         .values(data)
         .returning()
         .get();
@@ -300,16 +314,16 @@ class ProjectService {
    */
   async update(
     id: string,
-    data: Partial<InferInsertModel<typeof tables.project>>,
+    data: Partial<InferInsertModel<typeof tables.project.project>>,
   ) {
     try {
       const project = await useDB()
-        .update(tables.project)
+        .update(tables.project.project)
         .set({
           ...data,
           id,
         })
-        .where(eq(tables.project.id, id))
+        .where(eq(tables.project.project.id, id))
         .returning()
         .get();
 
@@ -333,12 +347,12 @@ class ProjectService {
       await useDB().transaction(async (tx) => {
         // remove existing skills
         await tx
-          .delete(tables.projectSkill)
-          .where(eq(tables.projectSkill.projectId, id));
+          .delete(tables.project.projectSkill)
+          .where(eq(tables.project.projectSkill.projectId, id));
 
         // insert new skills
         for (const skill of skills) {
-          await tx.insert(tables.projectSkill).values({
+          await tx.insert(tables.project.projectSkill).values({
             projectId: id,
             skill,
           });
@@ -365,12 +379,12 @@ class ProjectService {
       await useDB().transaction(async (tx) => {
         // remove existing contributors
         await tx
-          .delete(tables.projectContributor)
-          .where(eq(tables.projectContributor.projectId, id));
+          .delete(tables.project.projectContributor)
+          .where(eq(tables.project.projectContributor.projectId, id));
 
         // insert new contributors
         for (const userId of contributors) {
-          await tx.insert(tables.projectContributor).values({
+          await tx.insert(tables.project.projectContributor).values({
             projectId: id,
             userId,
           });
@@ -393,7 +407,9 @@ class ProjectService {
    */
   async delete(id: string) {
     try {
-      await useDB().delete(tables.project).where(eq(tables.project.id, id));
+      await useDB()
+        .delete(tables.project.project)
+        .where(eq(tables.project.project.id, id));
 
       return true;
     } catch (error) {
@@ -414,11 +430,14 @@ class ProjectService {
     try {
       const project = await useDB()
         .select({
-          id: tables.project.id,
+          id: tables.project.project.id,
         })
-        .from(tables.project)
+        .from(tables.project.project)
         .where(
-          and(eq(tables.project.id, id), eq(tables.project.ownerId, userId)),
+          and(
+            eq(tables.project.project.id, id),
+            eq(tables.project.project.ownerId, userId),
+          ),
         )
         .get();
 

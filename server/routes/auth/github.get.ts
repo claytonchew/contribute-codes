@@ -2,7 +2,7 @@ import { userService } from "~~/server/services/db/UserService";
 import { authService } from "~~/server/services/db/AuthService";
 import { sanitizeUser } from "~~/server/utils/auth";
 
-export default oauthGitHubEventHandler({
+export default defineOAuthGitHubEventHandler({
   config: {
     emailRequired: true,
   },

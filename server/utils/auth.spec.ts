@@ -10,7 +10,7 @@ describe("sanitizeUser", () => {
   });
 
   it("should return sanitized user object", () => {
-    const user: InferSelectModel<typeof tables.user> = {
+    const user: InferSelectModel<typeof tables.user.user> = {
       id: "1",
       name: "John Doe",
       email: "john.doe@example.com",
@@ -32,7 +32,7 @@ describe("sanitizeUser", () => {
   });
 
   it("should not include sensitive information in the sanitized user object", () => {
-    const user: InferSelectModel<typeof tables.user> = {
+    const user: InferSelectModel<typeof tables.user.user> = {
       id: "1",
       name: "John Doe",
       email: "john.doe@example.com",

@@ -17,7 +17,7 @@ const main = async () => {
 
     await useDB().transaction(async (tx) => {
       await tx
-        .insert(tables.skill)
+        .insert(tables.skill.skill)
         .values([
           // Languages
           { name: "JavaScript" },

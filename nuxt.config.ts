@@ -31,9 +31,10 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      baseUrl: process.env.BASE_URL,
+      baseUrl: "http://localhost:3000",
     },
     session: {
+      name: "cc-session",
       maxAge: 60 * 60 * 24 * 7, // Session expires after 7 days
     },
   },

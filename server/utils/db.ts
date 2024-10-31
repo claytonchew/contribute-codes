@@ -17,6 +17,7 @@ export const useDB = (): LibSQLDatabase<Record<string, never>> => {
         url: TURSO_DB_URL,
         authToken: TURSO_DB_TOKEN,
       }),
+      { casing: "snake_case" },
     );
   }
   return _db;

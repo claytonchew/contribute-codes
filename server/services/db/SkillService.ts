@@ -10,10 +10,10 @@ class SkillService {
     try {
       const skillsData = await useDB()
         .select({
-          name: tables.skill.name,
+          name: tables.skill.skill.name,
         })
-        .from(tables.skill)
-        .orderBy(asc(tables.skill.name))
+        .from(tables.skill.skill)
+        .orderBy(asc(tables.skill.skill.name))
         .all();
 
       return skillsData.map((skill) => skill.name);

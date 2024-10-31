@@ -11,8 +11,8 @@ class UserService {
     try {
       const user = await useDB()
         .select()
-        .from(tables.user)
-        .where(eq(tables.user.id, id))
+        .from(tables.user.user)
+        .where(eq(tables.user.user.id, id))
         .get();
 
       return user;
@@ -33,8 +33,8 @@ class UserService {
     try {
       const user = await useDB()
         .select()
-        .from(tables.user)
-        .where(eq(tables.user.email, email))
+        .from(tables.user.user)
+        .where(eq(tables.user.user.email, email))
         .get();
 
       return user;
@@ -58,7 +58,7 @@ class UserService {
   }) {
     try {
       const user = await useDB()
-        .insert(tables.user)
+        .insert(tables.user.user)
         .values(data)
         .returning()
         .get();
@@ -80,16 +80,16 @@ class UserService {
    */
   async update(
     id: string,
-    data: Partial<InferInsertModel<typeof tables.user>>,
+    data: Partial<InferInsertModel<typeof tables.user.user>>,
   ) {
     try {
       const user = await useDB()
-        .update(tables.user)
+        .update(tables.user.user)
         .set({
           ...data,
           id,
         })
-        .where(eq(tables.user.id, id))
+        .where(eq(tables.user.user.id, id))
         .returning()
         .get();
 

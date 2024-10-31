@@ -33,7 +33,7 @@ describe("useDB", () => {
       url: "test_url",
       authToken: "test_token",
     });
-    expect(drizzle).toHaveBeenCalledWith(mockClient);
+    expect(drizzle).toHaveBeenCalledWith(mockClient, { casing: "snake_case" });
     expect(db).toBe(mockDrizzle);
   });
 

@@ -14,7 +14,7 @@ class AuthService {
   ) {
     try {
       const oauthAccount = await useDB()
-        .insert(tables.oauthAccount)
+        .insert(tables.user.oauthAccount)
         .values({
           userId,
           providerId,

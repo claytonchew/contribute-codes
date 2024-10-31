@@ -6,12 +6,15 @@ if (!TURSO_DB_URL || !TURSO_DB_TOKEN) {
 }
 
 export default defineConfig({
-  dialect: "sqlite",
-  schema: "./server/database/schema.ts",
+  dialect: "turso",
+  schema: "./server/database/schema",
   out: "./server/database/migrations",
-  driver: "turso",
+  casing: "snake_case",
   dbCredentials: {
     url: TURSO_DB_URL,
     authToken: TURSO_DB_TOKEN,
+  },
+  migrations: {
+    prefix: "timestamp",
   },
 });

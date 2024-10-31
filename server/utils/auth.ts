@@ -8,7 +8,7 @@ import type { InferSelectModel } from "drizzle-orm";
  * @returns the sanitized user object
  */
 export const sanitizeUser = (
-  user: InferSelectModel<typeof tables.user> | null,
+  user: InferSelectModel<typeof tables.user.user> | null,
 ): User | null => {
   if (!user) return null;
   return {
