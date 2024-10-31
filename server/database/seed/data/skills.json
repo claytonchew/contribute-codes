@@ -1,0 +1,590 @@
+[
+  {
+    "name": "APL"
+  },
+  {
+    "name": "ASP.NET"
+  },
+  {
+    "name": "ASP.NET Core"
+  },
+  {
+    "name": "AWS"
+  },
+  {
+    "name": "Accessibility"
+  },
+  {
+    "name": "Ada"
+  },
+  {
+    "name": "Angular"
+  },
+  {
+    "name": "Ansible"
+  },
+  {
+    "name": "Apache Kafka"
+  },
+  {
+    "name": "Apex"
+  },
+  {
+    "name": "Argo"
+  },
+  {
+    "name": "ArgoCD"
+  },
+  {
+    "name": "Assembly"
+  },
+  {
+    "name": "Astro"
+  },
+  {
+    "name": "Azure"
+  },
+  {
+    "name": "Bash/Shell"
+  },
+  {
+    "name": "BigQuery"
+  },
+  {
+    "name": "Bootstrap"
+  },
+  {
+    "name": "Bulma"
+  },
+  {
+    "name": "Business Analysis"
+  },
+  {
+    "name": "C"
+  },
+  {
+    "name": "C#"
+  },
+  {
+    "name": "C++"
+  },
+  {
+    "name": "CI/CD"
+  },
+  {
+    "name": "CPython"
+  },
+  {
+    "name": "Cassandra"
+  },
+  {
+    "name": "CatBoost"
+  },
+  {
+    "name": "Chai"
+  },
+  {
+    "name": "Chakra UI"
+  },
+  {
+    "name": "CircleCI"
+  },
+  {
+    "name": "Clojure"
+  },
+  {
+    "name": "Cloudflare"
+  },
+  {
+    "name": "Cobol"
+  },
+  {
+    "name": "CodeIgniter"
+  },
+  {
+    "name": "CoffeeScript"
+  },
+  {
+    "name": "Cordova"
+  },
+  {
+    "name": "Cosmos DB"
+  },
+  {
+    "name": "Crystal"
+  },
+  {
+    "name": "Cucumber"
+  },
+  {
+    "name": "Cypress"
+  },
+  {
+    "name": "Dart"
+  },
+  {
+    "name": "DataRobot"
+  },
+  {
+    "name": "Databricks"
+  },
+  {
+    "name": "Dataiku"
+  },
+  {
+    "name": "Delphi"
+  },
+  {
+    "name": "Design"
+  },
+  {
+    "name": "DevOps"
+  },
+  {
+    "name": "Django"
+  },
+  {
+    "name": "Docker"
+  },
+  {
+    "name": "DynamoDB"
+  },
+  {
+    "name": "ElasticSearch"
+  },
+  {
+    "name": "Elixir"
+  },
+  {
+    "name": "Erlang"
+  },
+  {
+    "name": "Expo"
+  },
+  {
+    "name": "Express.js"
+  },
+  {
+    "name": "F#"
+  },
+  {
+    "name": "FastAI"
+  },
+  {
+    "name": "FastAPI"
+  },
+  {
+    "name": "Firebase"
+  },
+  {
+    "name": "Flask"
+  },
+  {
+    "name": "Flow"
+  },
+  {
+    "name": "Flutter"
+  },
+  {
+    "name": "Fortran"
+  },
+  {
+    "name": "GDScript"
+  },
+  {
+    "name": "Gatsby"
+  },
+  {
+    "name": "GitHub Actions"
+  },
+  {
+    "name": "GitLab CI"
+  },
+  {
+    "name": "Go"
+  },
+  {
+    "name": "Google Cloud"
+  },
+  {
+    "name": "Grafana"
+  },
+  {
+    "name": "GraphQL"
+  },
+  {
+    "name": "Groovy"
+  },
+  {
+    "name": "H2"
+  },
+  {
+    "name": "Haskell"
+  },
+  {
+    "name": "Heroku"
+  },
+  {
+    "name": "Hugging Face"
+  },
+  {
+    "name": "IBM DB2"
+  },
+  {
+    "name": "InfluxDB"
+  },
+  {
+    "name": "Information Architecture"
+  },
+  {
+    "name": "Ionic"
+  },
+  {
+    "name": "JUnit"
+  },
+  {
+    "name": "Java"
+  },
+  {
+    "name": "JavaScript"
+  },
+  {
+    "name": "Jenkins"
+  },
+  {
+    "name": "Jest"
+  },
+  {
+    "name": "Julia"
+  },
+  {
+    "name": "Keras"
+  },
+  {
+    "name": "Kibana"
+  },
+  {
+    "name": "Koa.js"
+  },
+  {
+    "name": "Kotlin"
+  },
+  {
+    "name": "Kubernetes"
+  },
+  {
+    "name": "Laravel"
+  },
+  {
+    "name": "LightGBM"
+  },
+  {
+    "name": "Lisp"
+  },
+  {
+    "name": "Logstash"
+  },
+  {
+    "name": "Lua"
+  },
+  {
+    "name": "MATLAB"
+  },
+  {
+    "name": "MariaDB"
+  },
+  {
+    "name": "Material-UI"
+  },
+  {
+    "name": "Matplotlib"
+  },
+  {
+    "name": "Meteor"
+  },
+  {
+    "name": "MobX"
+  },
+  {
+    "name": "Mocha"
+  },
+  {
+    "name": "MongoDB"
+  },
+  {
+    "name": "MySQL"
+  },
+  {
+    "name": "NLTK"
+  },
+  {
+    "name": "NestJS"
+  },
+  {
+    "name": "Netlify"
+  },
+  {
+    "name": "Next.js"
+  },
+  {
+    "name": "Nim"
+  },
+  {
+    "name": "Node.js"
+  },
+  {
+    "name": "NumPy"
+  },
+  {
+    "name": "Nuxt"
+  },
+  {
+    "name": "Nuxt UI"
+  },
+  {
+    "name": "OAuth"
+  },
+  {
+    "name": "OCaml"
+  },
+  {
+    "name": "Objective-C"
+  },
+  {
+    "name": "OpenCV"
+  },
+  {
+    "name": "Oracle"
+  },
+  {
+    "name": "PHP"
+  },
+  {
+    "name": "Pandas"
+  },
+  {
+    "name": "Perl"
+  },
+  {
+    "name": "Phoenix"
+  },
+  {
+    "name": "Playwright"
+  },
+  {
+    "name": "PostgreSQL"
+  },
+  {
+    "name": "PowerShell"
+  },
+  {
+    "name": "Product Design"
+  },
+  {
+    "name": "Project Management"
+  },
+  {
+    "name": "Project Management"
+  },
+  {
+    "name": "Prolog"
+  },
+  {
+    "name": "Prometheus"
+  },
+  {
+    "name": "Puppeteer"
+  },
+  {
+    "name": "PyTorch"
+  },
+  {
+    "name": "Python"
+  },
+  {
+    "name": "Quality Assurance"
+  },
+  {
+    "name": "R"
+  },
+  {
+    "name": "REST APIs"
+  },
+  {
+    "name": "RSpec"
+  },
+  {
+    "name": "RabbitMQ"
+  },
+  {
+    "name": "Raku"
+  },
+  {
+    "name": "RapidMiner"
+  },
+  {
+    "name": "React"
+  },
+  {
+    "name": "React Native"
+  },
+  {
+    "name": "Redis"
+  },
+  {
+    "name": "Redux"
+  },
+  {
+    "name": "Ruby"
+  },
+  {
+    "name": "Ruby on Rails"
+  },
+  {
+    "name": "Rust"
+  },
+  {
+    "name": "SAS"
+  },
+  {
+    "name": "SAS"
+  },
+  {
+    "name": "SEO"
+  },
+  {
+    "name": "SOAP"
+  },
+  {
+    "name": "SQL"
+  },
+  {
+    "name": "SQLite"
+  },
+  {
+    "name": "Scala"
+  },
+  {
+    "name": "Scikit-Learn"
+  },
+  {
+    "name": "Security"
+  },
+  {
+    "name": "Selenium"
+  },
+  {
+    "name": "Shadcn"
+  },
+  {
+    "name": "Snowflake"
+  },
+  {
+    "name": "Software Architecture"
+  },
+  {
+    "name": "Solidity"
+  },
+  {
+    "name": "Spacy"
+  },
+  {
+    "name": "Spring Framework"
+  },
+  {
+    "name": "Supabase"
+  },
+  {
+    "name": "Svelte"
+  },
+  {
+    "name": "Swift"
+  },
+  {
+    "name": "SwiftUI"
+  },
+  {
+    "name": "Tailwind CSS"
+  },
+  {
+    "name": "Technical Writing"
+  },
+  {
+    "name": "TensorFlow"
+  },
+  {
+    "name": "Terraform"
+  },
+  {
+    "name": "Thanos"
+  },
+  {
+    "name": "TypeScript"
+  },
+  {
+    "name": "Unit Testing"
+  },
+  {
+    "name": "Usability Testing"
+  },
+  {
+    "name": "User Experience"
+  },
+  {
+    "name": "User Interface"
+  },
+  {
+    "name": "User Research"
+  },
+  {
+    "name": "VBA"
+  },
+  {
+    "name": "Vagrant"
+  },
+  {
+    "name": "Valkey"
+  },
+  {
+    "name": "Vercel"
+  },
+  {
+    "name": "VirtualBox"
+  },
+  {
+    "name": "Visual Basic (.NET)"
+  },
+  {
+    "name": "Vitest"
+  },
+  {
+    "name": "Vue"
+  },
+  {
+    "name": "WebAssembly"
+  },
+  {
+    "name": "WebSockets"
+  },
+  {
+    "name": "Weka"
+  },
+  {
+    "name": "Wordpress"
+  },
+  {
+    "name": "XGBoost"
+  },
+  {
+    "name": "Xamarin"
+  },
+  {
+    "name": "Zig"
+  },
+  {
+    "name": "gRPC"
+  },
+  {
+    "name": "pytest"
+  }
+]
