@@ -215,7 +215,7 @@ class ProjectService {
       }));
 
       return {
-        data: projects,
+        records: projects,
         pagination: {
           page,
           perPage,
@@ -403,19 +403,21 @@ class ProjectService {
    * Delete a project
    *
    * @param id - project id
-   * @returns boolean
+   * @returns A promise that resolves to deleted record.
    */
   async delete(id: string) {
     try {
-      await useDB()
+      const record = await useDB()
         .delete(tables.project.project)
-        .where(eq(tables.project.project.id, id));
+        .where(eq(tables.project.project.id, id))
+        .returning()
+        .get();
 
-      return true;
+      return record;
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error(error);
-      return false;
+      throw error;
     }
   }
 
@@ -451,9 +453,9 @@ class ProjectService {
 }
 
 export interface ProjectGetAllOptions {
-  pageOptions?: { page?: number | null; perPage?: number | null } | null;
-  sort?: "newest" | "oldest" | null;
-  filters?: { skill?: string; ownerId?: string } | null;
+  pageOptions?: { page?: number; perPage?: number };
+  sort?: "newest" | "oldest";
+  filters?: { skill?: string; ownerId?: string };
 }
 
 export const projectService = new ProjectService();

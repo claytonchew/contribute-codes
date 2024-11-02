@@ -1,5 +1,5 @@
 import Seed from "./module";
-import { useDB } from "~~/server/utils/db";
+import { useDB } from "~~/server/utils/database";
 import config from "./config";
 import runner from "./runner";
 

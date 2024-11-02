@@ -1,5 +1,5 @@
-import { projectService } from "~~/server/services/db/ProjectService";
-import { projectSchema } from "~~/server/validations/project";
+import z from "zod";
+import { projectService } from "~~/server/services/database/ProjectService";
 
 export default defineEventHandler(async (event) => {
   const { user } = await requireUserSession(event, {
@@ -7,41 +7,43 @@ export default defineEventHandler(async (event) => {
     message: "You must be logged in to update a project.",
   });
 
-  const { id } = getQuery(event);
+  try {
+    const { id } = getQuery(event);
+    if (!id) {
+      throw createError({
+        statusCode: 400,
+        message: "Missing required parameter `id`",
+      });
+    }
 
-  if (!id) {
-    throw createError({
-      statusCode: 400,
-      message: "Missing required parameter `id`",
-    });
-  }
+    const isOwner = await projectService.isOwner(id as string, user.id);
+    if (!isOwner) {
+      throw createError({
+        statusCode: 403,
+        message: "You do not have permission to update this project.",
+      });
+    }
 
-  const isOwner = await projectService.isOwner(id as string, user.id);
+    const { contributorIds } = await readValidatedBody(
+      event,
+      z.object({ contributorIds: z.string().array() }).parse,
+    );
 
-  if (!isOwner) {
-    throw createError({
-      statusCode: 403,
-      message: "You do not have permission to update this project.",
-    });
-  }
-
-  const body = await readValidatedBody(event, (body) =>
-    projectSchema.updateContributors.parse(body),
-  );
-
-  if (
-    !(await projectService.updateContributors(
+    const update = projectService.updateContributors(
       id as string,
-      body.contributorIds,
-    ))
-  ) {
-    throw createError({
-      statusCode: 500,
-      message: "Failed to update project contributors.",
-    });
-  }
+      contributorIds,
+    );
+    if (!(await update)) {
+      throw createError({
+        statusCode: 500,
+        message: "Failed to update project contributors.",
+      });
+    }
 
-  return createResponse.success(
-    await projectService.getContributorsById(id as string),
-  );
+    return await projectService.getContributorsById(id as string);
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.log(error);
+    throw error;
+  }
 });

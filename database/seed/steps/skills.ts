@@ -1,6 +1,6 @@
-import type { SeedStep } from "~~/server/database/seed/module/Seed";
-import { tables } from "~~/server/utils/db";
-import skillsData from "~~/server/database/seed/data/skills.json";
+import type { SeedStep } from "~~/database/seed/module/Seed";
+import { tables } from "~~/server/utils/database";
+import skillsData from "~~/database/seed/data/skills.json";
 
 export default {
   seed: async (tx) => {

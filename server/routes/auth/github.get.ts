@@ -1,5 +1,5 @@
-import { userService } from "~~/server/services/db/UserService";
-import { authService } from "~~/server/services/db/AuthService";
+import { userService } from "~~/server/services/database/UserService";
+import { authService } from "~~/server/services/database/AuthService";
 import { sanitizeUser } from "~~/server/utils/auth";
 
 export default defineOAuthGitHubEventHandler({

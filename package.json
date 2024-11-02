@@ -22,7 +22,7 @@
     "db:drop": "drizzle-kit drop",
     "db:migrate": "drizzle-kit migrate",
     "db:deploy": "drizzle-kit push --verbose --strict",
-    "db:seed": "npx tsx --env-file=./.env ./server/database/seed",
+    "db:seed": "npx tsx --env-file=./.env ./database/seed",
     "db:check": "drizzle-kit check"
   },
   "lint-staged": {

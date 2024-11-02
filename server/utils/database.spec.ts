@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi, type Mock } from "vitest";
-import { useDB } from "./db";
+import { useDB } from "./database";
 import { createClient } from "@libsql/client/http";
 import { drizzle } from "drizzle-orm/libsql";
 

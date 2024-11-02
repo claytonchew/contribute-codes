@@ -23,6 +23,8 @@ export default defineNuxtConfig({
     layoutTransition: { name: "layout", mode: "out-in" },
   },
 
+  components: [{ path: "~/components/ui", pathPrefix: false }, "~/components"],
+
   content: {
     markdown: {
       anchorLinks: false,

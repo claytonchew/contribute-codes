@@ -1,5 +1,5 @@
-import { skillService } from "~~/server/services/db/SkillService";
+import { skillService } from "~~/server/services/database/SkillService";
 
 export default defineEventHandler(async () => {
-  return createResponse.success(await skillService.getAll());
+  return await skillService.getAll();
 });

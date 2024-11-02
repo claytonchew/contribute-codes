@@ -24,4 +24,4 @@ export const useDB = (): LibSQLDatabase<Record<string, never>> => {
 };
 
 // export all tables from the schema
-export * as tables from "../database/schema";
+export * as tables from "~~/database/schema";

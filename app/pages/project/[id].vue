@@ -158,8 +158,8 @@ const { data } = await useAsyncData(() =>
     query: { id: route.params.id },
   }).then(async (res) => {
     return {
-      ...res?.data,
-      content: await markdownParser.parse(res?.data?.id, res?.data?.content),
+      ...res,
+      content: await markdownParser.parse(res?.id, res?.content),
     };
   }),
 );

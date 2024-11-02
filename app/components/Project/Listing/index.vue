@@ -6,7 +6,7 @@
       <div class="flex flex-wrap items-center gap-2">
         <USelectMenu
           v-model="selectedSkill"
-          :options="skills.data"
+          :options="skills"
           searchable
           placeholder="Skill"
           color="white"
@@ -30,8 +30,8 @@
           label="Reset"
           @click="
             () => {
-              selectedSkill = null;
-              selectedSort = null;
+              selectedSkill = undefined;
+              selectedSort = undefined;
             }
           " />
         <UIcon
@@ -71,10 +71,10 @@
 
     <div v-if="!error">
       <div
-        v-if="listingData?.data?.length > 0"
+        v-if="listingData?.records?.length"
         class="grid gap-4 lg:grid-cols-3">
         <ProjectListingCard
-          v-for="project in listingData.data"
+          v-for="project in listingData.records"
           :key="project.id"
           :project="project" />
       </div>
@@ -91,7 +91,7 @@
 
     <!-- pagination -->
     <div
-      v-if="!error && listingData?.data?.length > 0"
+      v-if="!error && listingData?.records?.length"
       class="flex w-full justify-between gap-2">
       <!-- left -->
       <div class="flex items-center">
@@ -115,12 +115,10 @@
 </template>
 
 <script setup lang="ts">
-const selectedSkill = ref<string | null>(null);
-const { data: skills } = await useFetch<Array<string>>("/api/skills", {
-  pick: ["data"],
-});
+const selectedSkill = ref<string | undefined>();
+const { data: skills } = await useFetch("/api/skills");
 
-const selectedSort = ref<string | null>(null);
+const selectedSort = ref<string | undefined>();
 const sorts = [
   { label: "Newest First", id: "newest" },
   { label: "Oldest First", id: "oldest" },

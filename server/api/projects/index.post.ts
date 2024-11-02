@@ -1,11 +1,8 @@
-import {
-  projectService,
-  type ProjectGetAllOptions,
-} from "~~/server/services/db/ProjectService";
+import { projectService } from "~~/server/services/database/ProjectService";
+import { projectGetAllOptionsSchema } from "~~/validation/project";
 
 export default defineEventHandler(async (event) => {
-  const body: ProjectGetAllOptions | undefined =
-    (await readBody(event)) || undefined;
+  const body = await readValidatedBody(event, projectGetAllOptionsSchema.parse);
 
-  return createResponse.raw(await projectService.getAll(body));
+  return await projectService.getAll(body);
 });
