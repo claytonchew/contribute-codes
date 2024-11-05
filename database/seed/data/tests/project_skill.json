@@ -1,0 +1,32 @@
+[
+  {
+    "project_id": "abcd1234",
+    "skill": "React",
+    "created_at": 1727757842,
+    "updated_at": 1727757842
+  },
+  {
+    "project_id": "bcde2345",
+    "skill": "Node.js",
+    "created_at": 1727704355,
+    "updated_at": 1727704355
+  },
+  {
+    "project_id": "bcde2345",
+    "skill": "React",
+    "created_at": 1727704355,
+    "updated_at": 1727704355
+  },
+  {
+    "project_id": "bcde2345",
+    "skill": "TypeScript",
+    "created_at": 1727704355,
+    "updated_at": 1727704355
+  },
+  {
+    "project_id": "cdef3456",
+    "skill": "Python",
+    "created_at": 1727704355,
+    "updated_at": 1727704355
+  }
+]

@@ -2,6 +2,7 @@ import { sqliteTable, primaryKey } from "drizzle-orm/sqlite-core";
 import { createId } from "@paralleldrive/cuid2";
 
 import * as user from "./user";
+import * as skill from "./skill";
 
 export const project = sqliteTable("project", (t) => ({
   id: t
@@ -37,7 +38,7 @@ export const projectSkill = sqliteTable(
     skill: t
       .text()
       .notNull()
-      .references(() => skill.name, {
+      .references(() => skill.skill.name, {
         onUpdate: "cascade",
         onDelete: "cascade",
       }),

@@ -1,0 +1,24 @@
+version: "3"
+
+services:
+  turso:
+    image: ghcr.io/tursodatabase/libsql-server
+    environment:
+      - SQLD_NODE=primary
+      - SQLD_HTTP_AUTH=${TURSO_DB_TOKEN:-basic:ZGV2OnBhc3N3b3Jk}
+    ports:
+      - "38080:8080"
+      - "35001:5001"
+    restart: always
+    volumes:
+      - .dockerVolume/libsql:/var/lib/sqld
+
+  inbucket:
+    image: inbucket/inbucket
+    ports:
+      - 39000:9000
+      - 32500:2500
+      - 31100:1100
+    restart: always
+    volumes:
+      - .dockerVolume/inbucket:/data

@@ -62,7 +62,9 @@ class Seed implements SeedModule {
     >,
     version: number,
   ) {
-    await this.runSteps(tx, this.seedRunner!.versions![version]);
+    if (this.seedRunner?.versions && this.seedRunner.versions[version]) {
+      await this.runSteps(tx, this.seedRunner.versions[version]);
+    }
   }
 
   private async runJob(
@@ -84,15 +86,15 @@ class Seed implements SeedModule {
 
     const job = this.seedRunner!.jobs![jobId];
 
-    if (job.dependsOn) {
-      for (const dependency of job.dependsOn) {
+    if (job!.dependsOn) {
+      for (const dependency of job!.dependsOn) {
         const dependedJob = this.seedRunner.jobs![dependency];
         try {
-          await this.runJob(tx, dependency, job.continueOnError);
+          await this.runJob(tx, dependency, job!.continueOnError);
         } catch (error) {
           if (
-            !dependedJob.continueOnError &&
-            !job.continueOnError &&
+            !dependedJob!.continueOnError &&
+            !job!.continueOnError &&
             !continueOnError
           ) {
             throw error;
@@ -106,9 +108,9 @@ class Seed implements SeedModule {
     }
 
     try {
-      await this.runSteps(tx, job.steps);
+      await this.runSteps(tx, job!.steps);
     } catch (error) {
-      if (!job.continueOnError) {
+      if (!job!.continueOnError) {
         throw error;
       }
       // eslint-disable-next-line no-console
@@ -139,15 +141,15 @@ class Seed implements SeedModule {
 
     const test = this.seedRunner!.tests![testId];
 
-    if (test.dependsOn) {
-      for (const dependency of test.dependsOn) {
+    if (test!.dependsOn) {
+      for (const dependency of test!.dependsOn) {
         const dependedTest = this.seedRunner.tests![dependency];
         try {
-          await this.runTest(tx, dependency, test.continueOnError);
+          await this.runTest(tx, dependency, test!.continueOnError);
         } catch (error) {
           if (
-            !dependedTest.continueOnError &&
-            !test.continueOnError &&
+            !dependedTest!.continueOnError &&
+            !test!.continueOnError &&
             !continueOnError
           ) {
             throw error;
@@ -161,9 +163,9 @@ class Seed implements SeedModule {
     }
 
     try {
-      await this.runSteps(tx, test.steps);
+      await this.runSteps(tx, test!.steps);
     } catch (error) {
-      if (!test.continueOnError) {
+      if (!test!.continueOnError) {
         throw error;
       }
       // eslint-disable-next-line no-console
@@ -219,7 +221,7 @@ class Seed implements SeedModule {
           await this.runJob(
             tx,
             jobId,
-            this.seedRunner.jobs[jobId].continueOnError,
+            this.seedRunner.jobs?.[jobId]?.continueOnError,
           );
         }
       }
@@ -229,7 +231,7 @@ class Seed implements SeedModule {
           await this.runTest(
             tx,
             testId,
-            this.seedRunner.tests[testId].continueOnError,
+            this.seedRunner.tests?.[testId]?.continueOnError,
           );
         }
       }

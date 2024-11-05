@@ -20,23 +20,23 @@ export interface SeedStep {
 }
 
 export type SeedRunner = {
-  versions?: {
-    [version: number]: SeedStep[];
-  };
-  jobs?: {
-    [jobId: string]: {
+  versions?: Record<number, SeedStep[]>;
+  jobs?: Record<
+    string,
+    {
       steps: SeedStep[];
-      dependsOn?: (typeof jobId)[];
+      dependsOn?: string[];
       continueOnError?: boolean;
-    };
-  };
-  tests?: {
-    [testId: string]: {
+    }
+  >;
+  tests?: Record<
+    string,
+    {
       steps: SeedStep[];
       dependsOn?: (typeof testId)[];
       continueOnError?: boolean;
-    };
-  };
+    }
+  >;
 };
 
 export type SeedConfig = {
