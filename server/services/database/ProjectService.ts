@@ -12,8 +12,8 @@ class ProjectService {
   /**
    * Fetches a project by its id.
    *
-   * @param id - project id
-   * @returns project | null
+   * @param id - The ID of the project
+   * @returns A promise that resolves to the project or null if not found
    */
   async getById(id: string) {
     try {
@@ -83,11 +83,12 @@ class ProjectService {
    *
    * Note: This method does not fetch the `content` and `contributors` of the projects.
    *
-   * @param options - object containing pageOptions, sort, and filters
-   * @param options.pageOptions - pagination options including page and perPage
-   * @param options.sort - sorting order, either "newest" or "oldest"
-   * @param options.filters - filtering options including skill and/or ownerId
-   * @returns object containing data (list of projects) and pagination details
+   * @param options - Object containing pageOptions, sort, and filters
+   * @param options.pageOptions - Pagination options including page and perPage
+   * @param options.sort - Sorting order, either "newest" or "oldest"
+   * @param options.filters - Filtering options including skill and/or ownerId
+   * @returns A promise that that resolves to an object containing records and pagination
+   * @throws Error if query fails
    */
   async getAll(options: ProjectGetAllOptions = {}) {
     try {
@@ -225,15 +226,16 @@ class ProjectService {
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error(error);
-      return null;
+      throw error;
     }
   }
 
   /**
    * Fetches all skills of a project by its id.
    *
-   * @param id - project id
-   * @returns list of skills
+   * @param id - The ID of the project
+   * @returns A promise that resolves to an array of skills
+   * @throws Error if query fails
    */
   async getSkillsById(id: string) {
     try {
@@ -249,15 +251,16 @@ class ProjectService {
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error(error);
-      return null;
+      throw error;
     }
   }
 
   /**
    * Fetches all contributors of a project by its id.
    *
-   * @param id - project id
-   * @returns list of contributors
+   * @param id - The ID of the project
+   * @returns A promise that resolves to an array of contributors
+   * @throws Error if query fails
    */
   async getContributorsById(id: string) {
     try {
@@ -279,15 +282,15 @@ class ProjectService {
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error(error);
-      return null;
+      throw error;
     }
   }
 
   /**
    * Create a new project
    *
-   * @param data - project data
-   * @returns project | null
+   * @param data - The data of the project to create
+   * @returns A promise that resolves to the created project or null if failed
    */
   async create(data: InferInsertModel<typeof tables.project.project>) {
     try {
@@ -308,9 +311,9 @@ class ProjectService {
   /**
    * Update a project
    *
-   * @param id - project id
-   * @param data - project data
-   * @returns project | null
+   * @param id - The ID of the project
+   * @param data - The data of the project to update
+   * @returns A promise that resolves to the updated project or null if failed
    */
   async update(
     id: string,
@@ -338,9 +341,9 @@ class ProjectService {
   /**
    * Update project skills
    *
-   * @param id - project id
-   * @param skills - list of skills
-   * @returns boolean
+   * @param id - The ID of the project
+   * @param skills - The list of skills to update
+   * @returns A promise that resolves to a boolean indicating success or failure
    */
   async updateSkills(id: string, skills: string[]) {
     try {
@@ -370,9 +373,9 @@ class ProjectService {
   /**
    * Update project contributors
    *
-   * @param id - project id
-   * @param contributors - list of contributors user ids
-   * @returns boolean
+   * @param id - The ID of the project
+   * @param contributors - The list of contributors to update
+   * @returns A promise that resolves to a boolean indicating success or failure
    */
   async updateContributors(id: string, contributors: string[]) {
     try {
@@ -402,8 +405,9 @@ class ProjectService {
   /**
    * Delete a project
    *
-   * @param id - project id
+   * @param id - The ID of the project
    * @returns A promise that resolves to deleted record.
+   * @throws Error if query fails
    */
   async delete(id: string) {
     try {
@@ -424,9 +428,9 @@ class ProjectService {
   /**
    * Check if a user is the owner of a project
    *
-   * @param id - project id
-   * @param userId - user id
-   * @returns boolean
+   * @param id - The ID of the project
+   * @param userId - The ID of the user to check against
+   * @returns A promise that resolves to a boolean indicating if the user is the owner
    */
   async isOwner(id: string, userId: string) {
     try {

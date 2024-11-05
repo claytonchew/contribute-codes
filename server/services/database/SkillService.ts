@@ -4,7 +4,7 @@ class SkillService {
   /**
    * Fetches all skills, ordered by name (asc).
    *
-   * @returns skills[]
+   * @returns A promise that resolves to an array of skill names.
    */
   public async getAll() {
     try {

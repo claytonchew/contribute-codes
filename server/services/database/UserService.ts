@@ -4,8 +4,8 @@ class UserService {
   /**
    * Fetches a user by its id.
    *
-   * @param id - user id
-   * @returns user | null
+   * @param id - The ID of the user to fetch.
+   * @returns A promise that resolves to the user or null if not found.
    */
   async getById(id: string) {
     try {
@@ -26,8 +26,8 @@ class UserService {
   /**
    * Fetches a user by its email.
    *
-   * @param email - user email
-   * @returns user | null
+   * @param email - The email of the user to fetch.
+   * @returns A promise that resolves to the user or null if not found.
    */
   async getByEmail(email: string) {
     try {
@@ -48,8 +48,8 @@ class UserService {
   /**
    * Creates a new user.
    *
-   * @param data - user data
-   * @returns user | null
+   * @param data - The data of the user to create.
+   * @returns A promise that resolves to the created user or null if an error occurred.
    */
   async create(data: {
     name: string;
@@ -74,9 +74,9 @@ class UserService {
   /**
    * Updates a user by its id.
    *
-   * @param id - user id
-   * @param data - user data
-   * @returns user | null
+   * @param id - The ID of the user to update.
+   * @param data - The data of the user to update.
+   * @returns A promise that resolves to the updated user or null if an error occurred.
    */
   async update(
     id: string,
