@@ -1,17 +1,14 @@
+import { z } from "zod";
 import { projectService } from "~~/server/services/database/ProjectService";
 
 export default defineEventHandler(async (event) => {
   try {
-    const { id } = getQuery(event);
+    const { id } = await getValidatedQuery(
+      event,
+      z.object({ id: z.string() }).parse,
+    );
 
-    if (!id) {
-      throw createError({
-        statusCode: 400,
-        message: "Missing required parameter `id`",
-      });
-    }
-
-    const project = await projectService.getById(id as string);
+    const project = await projectService.getById(id);
 
     if (!project) {
       throw createError({

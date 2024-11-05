@@ -1,3 +1,4 @@
+import { z } from "zod";
 import { projectService } from "~~/server/services/database/ProjectService";
 
 export default defineEventHandler(async (event) => {
@@ -7,15 +8,13 @@ export default defineEventHandler(async (event) => {
   });
 
   try {
-    const { id } = getQuery(event);
-    if (!id) {
-      throw createError({
-        statusCode: 400,
-        message: "Missing required parameter `id`",
-      });
-    }
+    const { id } = await getValidatedQuery(
+      event,
+      z.object({ id: z.string() }).parse,
+    );
 
-    const isOwner = await projectService.isOwner(id as string, user.id);
+    const isOwner = await projectService.isOwner(id, user.id);
+
     if (!isOwner) {
       throw createError({
         statusCode: 403,
@@ -23,7 +22,7 @@ export default defineEventHandler(async (event) => {
       });
     }
 
-    return await projectService.delete(id as string);
+    return await projectService.delete(id);
   } catch (error) {
     // eslint-disable-next-line no-console
     console.log(error);

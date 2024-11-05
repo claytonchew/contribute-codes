@@ -1,3 +1,4 @@
+import { z } from "zod";
 import { projectService } from "~~/server/services/database/ProjectService";
 import { projectSchema } from "~~/validation/project";
 
@@ -8,16 +9,12 @@ export default defineEventHandler(async (event) => {
   });
 
   try {
-    const { id } = getQuery(event);
+    const { id } = await getValidatedQuery(
+      event,
+      z.object({ id: z.string() }).parse,
+    );
 
-    if (!id) {
-      throw createError({
-        statusCode: 400,
-        message: "Missing required parameter `id`",
-      });
-    }
-
-    const isOwner = await projectService.isOwner(id as string, user.id);
+    const isOwner = await projectService.isOwner(id, user.id);
 
     if (!isOwner) {
       throw createError({
@@ -33,7 +30,7 @@ export default defineEventHandler(async (event) => {
       flattenLineToSingleSpace: true,
     }).slice(0, 255);
 
-    const project = await projectService.update(id as string, {
+    const project = await projectService.update(id, {
       ...body,
       snippet,
     });

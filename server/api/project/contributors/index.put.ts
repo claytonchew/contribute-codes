@@ -8,15 +8,13 @@ export default defineEventHandler(async (event) => {
   });
 
   try {
-    const { id } = getQuery(event);
-    if (!id) {
-      throw createError({
-        statusCode: 400,
-        message: "Missing required parameter `id`",
-      });
-    }
+    const { id } = await getValidatedQuery(
+      event,
+      z.object({ id: z.string() }).parse,
+    );
 
-    const isOwner = await projectService.isOwner(id as string, user.id);
+    const isOwner = await projectService.isOwner(id, user.id);
+
     if (!isOwner) {
       throw createError({
         statusCode: 403,
@@ -29,10 +27,8 @@ export default defineEventHandler(async (event) => {
       z.object({ contributorIds: z.string().array() }).parse,
     );
 
-    const update = projectService.updateContributors(
-      id as string,
-      contributorIds,
-    );
+    const update = projectService.updateContributors(id, contributorIds);
+
     if (!(await update)) {
       throw createError({
         statusCode: 500,
@@ -40,7 +36,7 @@ export default defineEventHandler(async (event) => {
       });
     }
 
-    return await projectService.getContributorsById(id as string);
+    return await projectService.getContributorsById(id);
   } catch (error) {
     // eslint-disable-next-line no-console
     console.log(error);
