@@ -25,7 +25,7 @@
     </template>
 
     <template #account>
-      <div class="min-w-0 text-left">
+      <div class="min-w-0 text-left text-xs">
         <span class="block">Signed in as</span>
         <span class="block truncate font-medium">
           {{ user?.email }}
