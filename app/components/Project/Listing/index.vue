@@ -10,6 +10,7 @@
           searchable
           placeholder="Skill"
           color="white"
+          :loading="skillIsLoading"
           :ui-menu="{
             container: 'min-w-fit',
             popper: { placement: 'bottom-start' },
@@ -28,12 +29,7 @@
           v-if="selectedSkill || selectedSort"
           variant="link"
           label="Reset"
-          @click="
-            () => {
-              selectedSkill = undefined;
-              selectedSort = undefined;
-            }
-          " />
+          @click="reset" />
         <UIcon
           v-if="status === 'pending'"
           name="heroicons:arrow-path"
@@ -125,7 +121,8 @@
 
 <script setup lang="ts">
 const selectedSkill = useRouteQuery<string | undefined>("skill");
-const { data: skills } = await useFetch("/api/skills");
+const { data: skills, status: skillsStatus } = useFetch("/api/skills");
+const skillIsLoading = computed(() => skillsStatus.value === "pending");
 
 const selectedSort = useRouteQuery<string | undefined>("sort");
 const sorts = [
@@ -143,7 +140,7 @@ const {
   refresh,
   status,
   error,
-} = await useFetch("/api/projects", {
+} = useFetch("/api/projects", {
   method: "POST",
   body: {
     pageOptions: pagination,
@@ -159,12 +156,13 @@ const paginationLabel = computed(() => {
 
 watch([selectedSkill, selectedSort], () => {
   pagination.value.page = 1;
-  refresh();
 });
 
-watch(pagination, () => {
-  refresh();
-});
+const reset = () => {
+  selectedSkill.value = undefined;
+  selectedSort.value = undefined;
+  pagination.value.page = 1;
+};
 
 const addProjectModal = ref(false);
 const onProjectAddComplete = ({ id }: { id: string }) => {
