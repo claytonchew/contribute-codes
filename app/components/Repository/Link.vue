@@ -6,6 +6,7 @@
         ? `simple-icons:${parsedRepositoryUrl.platform}`
         : 'simple-icons:git'
     "
+    target="_blank"
     variant="link"
     color="black"
     :padded="false"

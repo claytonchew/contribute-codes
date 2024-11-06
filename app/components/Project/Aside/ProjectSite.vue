@@ -6,6 +6,7 @@
     </span>
     <UButton
       :to="props.data.projectUrl"
+      target="_blank"
       variant="link"
       color="black"
       :padded="false"
