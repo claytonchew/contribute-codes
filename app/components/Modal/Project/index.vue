@@ -78,7 +78,8 @@
             searchable
             searchable-placeholder="Search a skill"
             :options="skills"
-            :loading="skillsIsLoading" />
+            :loading="skillsIsLoading"
+            :popper="{ placement: 'top' }" />
           <div class="mt-2">
             <UButton
               v-for="(skill, index) in state.skills"
