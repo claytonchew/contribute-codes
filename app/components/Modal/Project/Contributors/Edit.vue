@@ -22,7 +22,8 @@
           class="w-full"
           :searchable="lookUpUser"
           icon="heroicons:magnifying-glass"
-          placeholder="Search name or email...">
+          placeholder="Search name or email..."
+          :loading="lookUpIsLoading">
           <template #label>
             <div v-if="selected" class="flex items-center gap-3">
               <UAvatar
@@ -72,7 +73,8 @@
           }"
           :ui="{
             emptyState: { wrapper: 'py-2', icon: 'mb-1' },
-          }">
+          }"
+          :loading="dataIsLoading">
           <template #name-data="{ row }">
             <div class="items -center flex gap-4">
               <UAvatar
@@ -139,6 +141,7 @@ const emits = defineEmits<{
 const toast = useToast();
 
 const loading = ref(false);
+
 const contributors = ref<
   | undefined
   | {
@@ -149,10 +152,16 @@ const contributors = ref<
       acceptedAt: string | null;
     }[]
 >(undefined);
-const { data: contributorsData } = await useFetch("/api/project/contributors", {
-  query: { id: props.id },
+const { data: contributorsData, status } = useFetch(
+  "/api/project/contributors",
+  {
+    query: { id: props.id },
+  },
+);
+const dataIsLoading = computed(() => status.value === "pending");
+watchEffect(() => {
+  contributors.value = contributorsData.value;
 });
-contributors.value = contributorsData.value;
 
 const selected = ref<
   | undefined
@@ -164,13 +173,17 @@ const selected = ref<
       acceptedAt: string | null;
     }
 >();
+const lookUpIsLoading = ref(false);
 const lookUpUser = async (keyword?: string) => {
   if (!keyword) {
     return [];
   }
-  return await $fetch("/api/user/lookup", {
+  lookUpIsLoading.value = true;
+  const users = await $fetch("/api/user/lookup", {
     query: { keyword },
   });
+  lookUpIsLoading.value = false;
+  return users;
 };
 const columns = [
   {

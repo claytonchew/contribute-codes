@@ -201,7 +201,7 @@ watch(showPreview, () => {
   }
 });
 
-const { data: skills, status: skillsStatus } = await useFetch("/api/skills");
+const { data: skills, status: skillsStatus } = useFetch("/api/skills");
 const skillsIsLoading = computed(() => skillsStatus.value === "pending");
 const removeSkill = (index: number) => {
   state.skills.splice(index, 1);
