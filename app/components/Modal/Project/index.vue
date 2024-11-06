@@ -192,8 +192,7 @@ watch(showPreview, () => {
   if (showPreview.value) {
     void markdownParser
       .parse("preview", state.content as string)
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      .then((data: Record<string, any>) => {
+      .then((data: typeof contentPreview.value) => {
         contentPreview.value = data;
       });
   } else {
