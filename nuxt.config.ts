@@ -16,6 +16,7 @@ export default defineNuxtConfig({
     "@nuxt/content",
     "@nuxt/fonts",
     "@nuxt/image",
+    "@vueuse/nuxt",
   ],
 
   app: {

@@ -19,9 +19,15 @@ export const projectGetAllOptionsSchema = z
   .optional();
 
 export const projectSchema = z.object({
-  title: z.string().min(1).max(255),
-  content: z.string().min(1).max(10000),
-  repositoryUrl: z.string().optional().nullable(),
-  projectUrl: z.string().optional().nullable(),
-  skills: z.array(z.string()).optional(),
+  title: z
+    .string()
+    .min(1, "Required")
+    .max(255, "Cannot be more than 255 characters"),
+  content: z
+    .string()
+    .min(1, "Required")
+    .max(10000, "Cannot be more than 10000 characters"),
+  repositoryUrl: z.string().url().optional().nullable(),
+  projectUrl: z.string().url().optional().nullable(),
+  skills: z.array(z.string()),
 });

@@ -2,8 +2,10 @@
   <ULink :to="`/project/${props.project.id}`" class="group">
     <UCard
       :ui="{
+        base: 'flex flex-col h-full',
         divide: 'divide-y-0',
         header: { padding: 'pb-0' },
+        body: { base: 'flex-1' },
         footer: { padding: 'pt-0' },
         ring: 'group-hover:ring-primary-500 dark:group-hover:ring-primary-600',
       }">

@@ -16,7 +16,7 @@
 
     <div class="py-8">
       <UContainer>
-        <ProjectListing />
+        <ProjectListing ref="projectListing" />
       </UContainer>
     </div>
 
@@ -33,9 +33,18 @@
           color="black"
           label="Add your Project"
           size="lg"
-          class="mx-auto mt-4" />
+          class="mx-auto mt-4"
+          @click="addProjectModal = true" />
       </UContainer>
     </div>
+
+    <UModal
+      v-model="addProjectModal"
+      :ui="{ width: 'w-full max-w-xl', strategy: 'override' }">
+      <ModalProjectAdd
+        @close="addProjectModal = false"
+        @complete="onProjectAddComplete" />
+    </UModal>
   </div>
 </template>
 
@@ -43,4 +52,11 @@
 useSeoMeta({
   title: "Explore",
 });
+
+const projectListing = useTemplateRef("projectListing");
+
+const addProjectModal = ref(false);
+const onProjectAddComplete = ({ id }: { id: string }) => {
+  navigateTo(`/project/${id}`);
+};
 </script>

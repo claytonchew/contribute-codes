@@ -44,7 +44,8 @@
         <UButton
           color="black"
           icon="heroicons:plus-circle"
-          label="Add your Project" />
+          label="Add your Project"
+          @click="addProjectModal = true" />
       </div>
     </div>
 
@@ -111,6 +112,14 @@
           :total="total" />
       </div>
     </div>
+
+    <UModal
+      v-model="addProjectModal"
+      :ui="{ width: 'w-full max-w-xl', strategy: 'override' }">
+      <ModalProjectAdd
+        @close="addProjectModal = false"
+        @complete="onProjectAddComplete" />
+    </UModal>
   </div>
 </template>
 
@@ -156,4 +165,9 @@ watch([selectedSkill, selectedSort], () => {
 watch(pagination, () => {
   refresh();
 });
+
+const addProjectModal = ref(false);
+const onProjectAddComplete = ({ id }: { id: string }) => {
+  navigateTo(`/project/${id}`);
+};
 </script>
