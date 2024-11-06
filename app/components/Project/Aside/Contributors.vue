@@ -8,10 +8,10 @@
         label="Edit"
         variant="ghost"
         size="xs"
-        square />
+        @click="editContributorsModal = true" />
     </div>
     <div class="flex flex-wrap gap-2">
-      <ULink v-if="isOwner">
+      <ULink v-if="isOwner" @click="editContributorsModal = true">
         <UAvatar v-if="props.data.owner" alt="+" size="lg" />
       </ULink>
       <UTooltip
@@ -25,12 +25,22 @@
           size="lg" />
       </UTooltip>
     </div>
+
+    <UModal
+      v-model="editContributorsModal"
+      :ui="{ width: 'w-full max-w-xl', strategy: 'override' }">
+      <ModalProjectContributorsEdit
+        :id="props.data.id"
+        @close="editContributorsModal = false"
+        @refresh="emits('refresh')" />
+    </UModal>
   </div>
 </template>
 
 <script setup lang="ts">
 const props = defineProps<{
   data: {
+    id: string;
     contributors: {
       avatar: string | null;
       id: string;
@@ -44,6 +54,10 @@ const props = defineProps<{
   };
 }>();
 
+const emits = defineEmits<{
+  refresh: [];
+}>();
+
 const isOwner = computed(() => {
   return props.data.owner.id === useUserSession().user.value?.id;
 });
@@ -51,4 +65,6 @@ const isOwner = computed(() => {
 const hasContributors = computed(() => {
   return (props.data?.contributors || []).length;
 });
+
+const editContributorsModal = ref(false);
 </script>

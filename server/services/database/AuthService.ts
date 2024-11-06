@@ -2,9 +2,9 @@ class AuthService {
   /**
    * Link OAuth account to user
    *
-   * @param userId
-   * @param providerId
-   * @param providerUserId
+   * @param userId The ID of the user to link the OAuth account to
+   * @param providerId The ID of the provider
+   * @param providerUserId The ID associated with the user on the OAuth provider
    * @returns oauthAccount | null
    */
   async linkOAuthAccount(

@@ -75,6 +75,10 @@ export const projectContributor = sqliteTable(
       .integer({ mode: "timestamp" })
       .notNull()
       .$onUpdate(() => new Date()),
+    requestedBy: t.text().references(() => user.user.id, {
+      onDelete: "cascade",
+    }),
+    acceptedAt: t.integer({ mode: "timestamp" }),
   }),
   (table) => ({
     primaryKey: primaryKey({ columns: [table.projectId, table.userId] }),

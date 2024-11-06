@@ -35,7 +35,7 @@
 
       <ProjectAsideSkillsWanted v-if="data" :data="data" @refresh="refresh" />
 
-      <ProjectAsideContributors v-if="data" :data="data" />
+      <ProjectAsideContributors v-if="data" :data="data" @refresh="refresh" />
 
       <div class="space-y-2">
         <UButton color="white" size="lg" block> Share Project </UButton>

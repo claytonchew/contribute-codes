@@ -1,10 +1,10 @@
-import { eq, type InferInsertModel } from "drizzle-orm";
+import { eq, like, or, type InferInsertModel } from "drizzle-orm";
 
 class UserService {
   /**
    * Fetches a user by its id.
    *
-   * @param id - The ID of the user to fetch.
+   * @param id The ID of the user to fetch.
    * @returns A promise that resolves to the user or null if not found.
    */
   async getById(id: string) {
@@ -26,7 +26,7 @@ class UserService {
   /**
    * Fetches a user by its email.
    *
-   * @param email - The email of the user to fetch.
+   * @param email The email of the user to fetch.
    * @returns A promise that resolves to the user or null if not found.
    */
   async getByEmail(email: string) {
@@ -48,7 +48,7 @@ class UserService {
   /**
    * Creates a new user.
    *
-   * @param data - The data of the user to create.
+   * @param data The data of the user to create.
    * @returns A promise that resolves to the created user or null if an error occurred.
    */
   async create(data: {
@@ -74,8 +74,8 @@ class UserService {
   /**
    * Updates a user by its id.
    *
-   * @param id - The ID of the user to update.
-   * @param data - The data of the user to update.
+   * @param id The ID of the user to update.
+   * @param data The data of the user to update.
    * @returns A promise that resolves to the updated user or null if an error occurred.
    */
   async update(
@@ -98,6 +98,33 @@ class UserService {
       // eslint-disable-next-line no-console
       console.error(error);
       return null;
+    }
+  }
+
+  /**
+   * Fetches users by a keyword.
+   *
+   * @param keyword The keyword that matches the user's name or email.
+   * @returns A promise that resolves to the users or an empty array if not found.
+   */
+  async getUsersByKeyword(keyword: string) {
+    try {
+      const users = await useDB()
+        .select()
+        .from(tables.user.user)
+        .where(
+          or(
+            like(tables.user.user.name, `%${keyword}%`),
+            like(tables.user.user.email, `%${keyword}%`),
+          ),
+        )
+        .all();
+
+      return users;
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error(error);
+      return [];
     }
   }
 }

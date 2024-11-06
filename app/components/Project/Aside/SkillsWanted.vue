@@ -23,7 +23,7 @@
     </div>
 
     <UModal v-model="editSkillsModal">
-      <ModalSkillsEdit
+      <ModalProjectSkillsEdit
         :initial-state="props.data"
         @close="editSkillsModal = false"
         @refresh="emits('refresh')" />

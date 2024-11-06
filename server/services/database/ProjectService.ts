@@ -6,13 +6,16 @@ import {
   exists,
   and,
   type InferInsertModel,
+  inArray,
+  getTableColumns,
+  isNotNull,
 } from "drizzle-orm";
 
 class ProjectService {
   /**
    * Fetches a project by its id.
    *
-   * @param id - The ID of the project
+   * @param id The ID of the project
    * @returns A promise that resolves to the project or null if not found
    */
   async getById(id: string) {
@@ -55,7 +58,12 @@ class ProjectService {
           avatar: tables.user.user.avatar,
         })
         .from(tables.project.projectContributor)
-        .where(eq(tables.project.projectContributor.projectId, id))
+        .where(
+          and(
+            eq(tables.project.projectContributor.projectId, id),
+            isNotNull(tables.project.projectContributor.acceptedAt),
+          ),
+        )
         .innerJoin(
           tables.user.user,
           eq(tables.user.user.id, tables.project.projectContributor.userId),
@@ -83,10 +91,10 @@ class ProjectService {
    *
    * Note: This method does not fetch the `content` and `contributors` of the projects.
    *
-   * @param options - Object containing pageOptions, sort, and filters
-   * @param options.pageOptions - Pagination options including page and perPage
-   * @param options.sort - Sorting order, either "newest" or "oldest"
-   * @param options.filters - Filtering options including skill and/or ownerId
+   * @param options Object containing pageOptions, sort, and filters
+   * @param options.pageOptions Pagination options including page and perPage
+   * @param options.sort Sorting order, either "newest" or "oldest"
+   * @param options.filters Filtering options including skill and/or ownerId
    * @returns A promise that that resolves to an object containing records and pagination
    * @throws Error if query fails
    */
@@ -233,7 +241,7 @@ class ProjectService {
   /**
    * Fetches all skills of a project by its id.
    *
-   * @param id - The ID of the project
+   * @param id The ID of the project
    * @returns A promise that resolves to an array of skills
    * @throws Error if query fails
    */
@@ -258,17 +266,16 @@ class ProjectService {
   /**
    * Fetches all contributors of a project by its id.
    *
-   * @param id - The ID of the project
+   * @param id The ID of the project
    * @returns A promise that resolves to an array of contributors
-   * @throws Error if query fails
    */
   async getContributorsById(id: string) {
     try {
       const contributors = await useDB()
         .select({
-          id: tables.user.user.id,
-          name: tables.user.user.name,
-          avatar: tables.user.user.avatar,
+          ...getTableColumns(tables.user.user),
+          acceptedAt: tables.project.projectContributor.acceptedAt,
+          requstedBy: tables.project.projectContributor.requestedBy,
         })
         .from(tables.project.projectContributor)
         .where(eq(tables.project.projectContributor.projectId, id))
@@ -282,14 +289,14 @@ class ProjectService {
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error(error);
-      throw error;
+      return [];
     }
   }
 
   /**
    * Create a new project
    *
-   * @param data - The data of the project to create
+   * @param data The data of the project to create
    * @returns A promise that resolves to the created project or null if failed
    */
   async create(data: InferInsertModel<typeof tables.project.project>) {
@@ -311,8 +318,8 @@ class ProjectService {
   /**
    * Update a project
    *
-   * @param id - The ID of the project
-   * @param data - The data of the project to update
+   * @param id The ID of the project
+   * @param data The data of the project to update
    * @returns A promise that resolves to the updated project or null if failed
    */
   async update(
@@ -341,71 +348,145 @@ class ProjectService {
   /**
    * Update project skills
    *
-   * @param id - The ID of the project
-   * @param skills - The list of skills to update
-   * @returns A promise that resolves to a boolean indicating success or failure
+   * @param id The ID of the project
+   * @param skills The list of skills to update
+   * @returns A promise that resolves to an array of updated skills
+   * @throws Error if update fails
    */
   async updateSkills(id: string, skills: string[]) {
     try {
-      await useDB().transaction(async (tx) => {
+      const records = await useDB().transaction(async (tx) => {
         // remove existing skills
         await tx
           .delete(tables.project.projectSkill)
           .where(eq(tables.project.projectSkill.projectId, id));
 
         // insert new skills
-        for (const skill of skills) {
-          await tx.insert(tables.project.projectSkill).values({
-            projectId: id,
-            skill,
-          });
-        }
+        const newSkills = await tx
+          .insert(tables.project.projectSkill)
+          .values(
+            skills.map((skill) => ({
+              projectId: id,
+              skill,
+            })),
+          )
+          .returning()
+          .all();
+
+        return newSkills;
       });
 
-      return true;
+      return records;
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error(error);
-      return false;
+      throw error;
     }
   }
 
   /**
    * Update project contributors
    *
-   * @param id - The ID of the project
-   * @param contributors - The list of contributors to update
-   * @returns A promise that resolves to a boolean indicating success or failure
+   * @param id The ID of the project
+   * @param contributors The list of contributors to update
+   * @param requesterId The ID of the user who requested the update
+   * @returns A promise that resolves to an object containing old and new contributors
+   * @throws Error if update fails
    */
-  async updateContributors(id: string, contributors: string[]) {
+  async updateContributors(
+    id: string,
+    contributors: string[],
+    requesterId: string,
+  ) {
     try {
-      await useDB().transaction(async (tx) => {
-        // remove existing contributors
-        await tx
-          .delete(tables.project.projectContributor)
-          .where(eq(tables.project.projectContributor.projectId, id));
+      const records = await useDB().transaction(async (tx) => {
+        const project = await tx
+          .select()
+          .from(tables.project.project)
+          .where(eq(tables.project.project.id, id))
+          .get();
 
-        // insert new contributors
-        for (const userId of contributors) {
-          await tx.insert(tables.project.projectContributor).values({
-            projectId: id,
-            userId,
+        if (!project) {
+          throw createError({
+            statusCode: 404,
+            statusMessage: "Project not found.",
           });
         }
+
+        const existingContributors = await tx
+          .select({
+            ...getTableColumns(tables.user.user),
+            acceptedAt: tables.project.projectContributor.acceptedAt,
+            requestedBy: tables.project.projectContributor.requestedBy,
+          })
+          .from(tables.project.projectContributor)
+          .where(eq(tables.project.projectContributor.projectId, id))
+          .innerJoin(
+            tables.user.user,
+            eq(tables.user.user.id, tables.project.projectContributor.userId),
+          )
+          .all();
+
+        // remove existing contributors that are not in the new list
+        await tx.delete(tables.project.projectContributor).where(
+          and(
+            inArray(
+              tables.project.projectContributor.userId,
+              existingContributors
+                .filter((contributor) => !contributors.includes(contributor.id))
+                .map((contributor) => contributor.id),
+            ),
+            eq(tables.project.projectContributor.projectId, id),
+          ),
+        );
+
+        // insert new contributors
+        if (contributors.length > 0) {
+          await tx
+            .insert(tables.project.projectContributor)
+            .values(
+              contributors.map((userId) => ({
+                projectId: id,
+                userId,
+                acceptedAt: userId === project.ownerId ? new Date() : null,
+                requestedBy: requesterId,
+              })),
+            )
+            .onConflictDoNothing();
+        }
+
+        const newContributors = await tx
+          .select({
+            ...getTableColumns(tables.user.user),
+            acceptedAt: tables.project.projectContributor.acceptedAt,
+            requestedBy: tables.project.projectContributor.requestedBy,
+          })
+          .from(tables.project.projectContributor)
+          .where(eq(tables.project.projectContributor.projectId, id))
+          .innerJoin(
+            tables.user.user,
+            eq(tables.user.user.id, tables.project.projectContributor.userId),
+          )
+          .all();
+
+        return {
+          old: existingContributors,
+          new: newContributors,
+        };
       });
 
-      return true;
+      return records;
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error(error);
-      return false;
+      throw error;
     }
   }
 
   /**
    * Delete a project
    *
-   * @param id - The ID of the project
+   * @param id The ID of the project
    * @returns A promise that resolves to deleted record.
    * @throws Error if query fails
    */
@@ -428,8 +509,8 @@ class ProjectService {
   /**
    * Check if a user is the owner of a project
    *
-   * @param id - The ID of the project
-   * @param userId - The ID of the user to check against
+   * @param id The ID of the project
+   * @param userId The ID of the user to check against
    * @returns A promise that resolves to a boolean indicating if the user is the owner
    */
   async isOwner(id: string, userId: string) {

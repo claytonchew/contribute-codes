@@ -46,7 +46,10 @@ export default defineEventHandler(async (event) => {
       await projectService.updateSkills(project.id, body.skills);
     }
 
-    return project;
+    return {
+      ...project,
+      skills: body.skills,
+    };
   } catch (error) {
     // eslint-disable-next-line no-console
     console.log(error);

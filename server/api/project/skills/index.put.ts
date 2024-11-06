@@ -29,15 +29,9 @@ export default defineEventHandler(async (event) => {
       z.object({ skills: z.string().array() }).parse,
     );
 
-    const update = projectService.updateSkills(id as string, skills);
-    if (!(await update)) {
-      throw createError({
-        statusCode: 500,
-        message: "Failed to update project skills.",
-      });
-    }
-
-    return await projectService.getSkillsById(id as string);
+    return (await projectService.updateSkills(id as string, skills)).map(
+      (skill) => skill.skill,
+    );
   } catch (error) {
     // eslint-disable-next-line no-console
     console.log(error);
