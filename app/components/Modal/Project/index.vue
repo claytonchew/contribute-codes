@@ -182,7 +182,7 @@ const state = reactive({
   content: props.initialState?.content ?? undefined,
   repositoryUrl: props.initialState?.repositoryUrl ?? undefined,
   projectUrl: props.initialState?.projectUrl ?? undefined,
-  skills: props.initialState?.skills ?? [],
+  skills: [...(props.initialState?.skills ?? [])],
 });
 
 const showPreview = ref(false);

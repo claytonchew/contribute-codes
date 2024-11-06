@@ -8,23 +8,33 @@
         label="Edit"
         variant="ghost"
         size="xs"
-        square />
+        @click="editSkillsModal = true" />
     </div>
     <div class="flex flex-wrap gap-2">
-      <UBadge
+      <UButton
         v-for="skill in props.data.skills"
         :key="skill"
         color="white"
-        :ui="{ rounded: 'rounded-full' }">
+        :to="`/?skill=${skill}`"
+        :ui="{ rounded: 'rounded-full' }"
+        size="xs">
         {{ skill }}
-      </UBadge>
+      </UButton>
     </div>
+
+    <UModal v-model="editSkillsModal">
+      <ModalSkillsEdit
+        :initial-state="props.data"
+        @close="editSkillsModal = false"
+        @refresh="emits('refresh')" />
+    </UModal>
   </div>
 </template>
 
 <script setup lang="ts">
 const props = defineProps<{
   data: {
+    id: string;
     skills: string[];
     owner: {
       avatar: string | null;
@@ -34,6 +44,10 @@ const props = defineProps<{
   };
 }>();
 
+const emits = defineEmits<{
+  refresh: [];
+}>();
+
 const isOwner = computed(() => {
   return props.data.owner.id === useUserSession().user.value?.id;
 });
@@ -41,4 +55,6 @@ const isOwner = computed(() => {
 const hasSkills = computed(() => {
   return (props.data?.skills || []).length;
 });
+
+const editSkillsModal = ref(false);
 </script>

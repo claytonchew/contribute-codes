@@ -124,10 +124,10 @@
 </template>
 
 <script setup lang="ts">
-const selectedSkill = ref<string | undefined>();
+const selectedSkill = useRouteQuery<string | undefined>("skill");
 const { data: skills } = await useFetch("/api/skills");
 
-const selectedSort = ref<string | undefined>();
+const selectedSort = useRouteQuery<string | undefined>("sort");
 const sorts = [
   { label: "Newest First", id: "newest" },
   { label: "Oldest First", id: "oldest" },

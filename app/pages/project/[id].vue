@@ -33,7 +33,7 @@
         <ProjectAsideProjectSite :data="data" />
       </div>
 
-      <ProjectAsideSkillsWanted v-if="data" :data="data" />
+      <ProjectAsideSkillsWanted v-if="data" :data="data" @refresh="refresh" />
 
       <ProjectAsideContributors v-if="data" :data="data" />
 
