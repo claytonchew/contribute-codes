@@ -42,6 +42,16 @@
         <UButton v-if="!isOwner" color="black" size="lg" block>
           Volunteer this project
         </UButton>
+        <UButton
+          v-if="isOwner"
+          icon="heroicons:trash"
+          color="red"
+          variant="soft"
+          size="lg"
+          block
+          @click="deleteProjectModal = true">
+          Delete Project
+        </UButton>
       </div>
     </template>
 
@@ -53,6 +63,16 @@
         :initial-state="data"
         @close="editProjectModal = false"
         @refresh="refresh" />
+    </UModal>
+    <UModal
+      v-model="deleteProjectModal"
+      :ui="{ width: 'w-full max-w-xl', strategy: 'override' }">
+      <ModalProjectDelete
+        v-if="data"
+        :id="data.id"
+        :project="data"
+        @close="deleteProjectModal = false"
+        @on-complete="handlePostDelete" />
     </UModal>
   </ProjectPageContainer>
 </template>
@@ -94,4 +114,9 @@ const isOwner = computed(() => {
 });
 
 const editProjectModal = ref(false);
+
+const deleteProjectModal = ref(false);
+const handlePostDelete = () => {
+  navigateTo("/");
+};
 </script>
