@@ -18,5 +18,6 @@ export default defineEventHandler(async (event) => {
     email: contributor.email,
     avatar: contributor.avatar,
     acceptedAt: contributor.acceptedAt,
+    requestedBy: contributor.requestedBy,
   }));
 });

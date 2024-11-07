@@ -275,7 +275,7 @@ class ProjectService {
         .select({
           ...getTableColumns(tables.user.user),
           acceptedAt: tables.project.projectContributor.acceptedAt,
-          requstedBy: tables.project.projectContributor.requestedBy,
+          requestedBy: tables.project.projectContributor.requestedBy,
         })
         .from(tables.project.projectContributor)
         .where(eq(tables.project.projectContributor.projectId, id))

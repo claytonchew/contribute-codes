@@ -57,7 +57,7 @@
         </USelectMenu>
         <UButton
           color="gray"
-          label="Invite"
+          label="Add"
           :disabled="!selected"
           :loading="loading"
           @click="addContributor" />
@@ -93,9 +93,38 @@
             </div>
           </template>
           <template #status-data="{ row }">
-            <UBadge v-if="!row.acceptedAt" color="yellow" variant="subtle">
-              Pending
+            <!-- user adding himself to the project -->
+            <UBadge v-if="row.isNew && user?.id === row.id" color="white">
+              To Add
             </UBadge>
+            <!-- user adding other users to project -->
+            <UBadge v-else-if="row.isNew && user?.id !== row.id" color="white">
+              To Invite
+              <UTooltip
+                v-if="row.id !== row.requestedBy"
+                class="ml-1"
+                :text="`Requires acceptance by ${row.name}`">
+                <UIcon name="heroicons:information-circle" class="h-5 w-5" />
+              </UTooltip>
+            </UBadge>
+            <!-- previously added but yet to accept -->
+            <UBadge v-else-if="!row.acceptedAt" color="yellow" variant="subtle">
+              Pending
+              <UTooltip
+                v-if="row.id !== row.requestedBy"
+                class="ml-1"
+                :text="`Requires acceptance by ${row.name}`">
+                <UIcon
+                  name="heroicons:information-circle-solid"
+                  class="h-5 w-5" />
+              </UTooltip>
+              <UTooltip v-else class="ml-1" text="Requires acceptance by You">
+                <UIcon
+                  name="heroicons:information-circle-solid"
+                  class="h-5 w-5" />
+              </UTooltip>
+            </UBadge>
+            <!-- previously added but have accepted -->
             <UBadge v-else color="green" variant="subtle"> Added </UBadge>
           </template>
           <template #action-data="{ row }">
@@ -139,6 +168,7 @@ const emits = defineEmits<{
 }>();
 
 const toast = useToast();
+const { user } = useUserSession();
 
 const loading = ref(false);
 
@@ -150,6 +180,8 @@ const contributors = ref<
       email: string;
       avatar: string | null;
       acceptedAt: string | null;
+      requestedBy?: string | null;
+      isNew?: boolean;
     }[]
 >(undefined);
 const { data: contributorsData, status } = useFetch(
@@ -171,6 +203,7 @@ const selected = ref<
       email: string;
       avatar: string | null;
       acceptedAt: string | null;
+      isNew?: boolean;
     }
 >();
 const lookUpIsLoading = ref(false);
@@ -183,7 +216,10 @@ const lookUpUser = async (keyword?: string) => {
     query: { keyword },
   });
   lookUpIsLoading.value = false;
-  return users;
+  return users.map((user) => ({
+    ...user,
+    isNew: true,
+  }));
 };
 const columns = [
   {
@@ -203,6 +239,7 @@ const addContributor = () => {
   if (!contributors.value) return;
   if (!selected.value) return;
   if (contributors.value.find((c) => c.id === selected.value?.id)) {
+    selected.value = undefined;
     return;
   }
   contributors.value.push({
