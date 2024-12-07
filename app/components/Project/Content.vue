@@ -6,7 +6,7 @@
     </template>
     <ContentRendererMarkdown
       :value="props.data.renderedContent"
-      class="prose-sm dark:prose-invert prose-ul:list-disc prose-ol:list-decimal prose-hr:border-gray-200 dark:prose-hr:border-gray-800 !max-w-none" />
+      class="prose prose-sm dark:prose-invert prose-ul:list-disc prose-ol:list-decimal prose-hr:border-gray-200 dark:prose-hr:border-gray-800 !max-w-none" />
   </section>
 </template>
 
