@@ -35,13 +35,13 @@
               :to="`/project/${row.id}`"
               variant="link"
               :padded="false"
-              truncate
-              block>
-              <span class="truncate font-bold">
+              truncate>
+              <span
+                class="block max-w-sm truncate text-left text-base lg:max-w-lg">
                 {{ row.title }}
               </span>
             </UButton>
-            <p class="line-clamp-2 whitespace-pre-line">
+            <p class="line-clamp-2 whitespace-pre-line text-sm">
               {{ row.snippet }}
             </p>
           </div>
