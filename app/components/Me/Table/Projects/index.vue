@@ -80,7 +80,7 @@ const columns = [
   },
   {
     key: "title",
-    label: "Title",
+    label: "Project",
   },
   {
     key: "skills",
