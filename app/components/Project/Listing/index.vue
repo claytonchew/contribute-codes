@@ -105,6 +105,9 @@
         <UPagination
           v-model="pagination.page"
           :page-count="pagination.perPage"
+          :active-button="{
+            color: 'black',
+          }"
           :total="total" />
       </div>
     </div>
