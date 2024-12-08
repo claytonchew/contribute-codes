@@ -107,6 +107,18 @@ const toast = useToast();
 const userLinks = [
   [
     {
+      label: "Projects",
+      icon: "heroicons:document-text",
+      to: "/me/projects",
+    },
+    {
+      label: "Requests",
+      icon: "heroicons:chat-bubble-bottom-center-text",
+      to: "/me/requests",
+    },
+  ],
+  [
+    {
       label: "Sign out",
       icon: "heroicons:arrow-left-end-on-rectangle-16-solid",
       click: async () => {

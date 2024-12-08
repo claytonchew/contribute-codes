@@ -239,6 +239,57 @@ class ProjectService {
   }
 
   /**
+   * Fetches all projects by the owner's id.
+   *
+   * @param ownerId The user ID of the owner
+   * @returns A promise that resolves to an array of projects
+   */
+  async getAllByOwnerId(ownerId: string) {
+    try {
+      const projects = await useDB()
+        .select({
+          id: tables.project.project.id,
+          createdAt: tables.project.project.createdAt,
+          updatedAt: tables.project.project.updatedAt,
+          title: tables.project.project.title,
+          snippet: tables.project.project.snippet,
+          repositoryUrl: tables.project.project.repositoryUrl,
+          projectUrl: tables.project.project.projectUrl,
+          owner: {
+            id: tables.user.user.id,
+            name: tables.user.user.name,
+            avatar: tables.user.user.avatar,
+          },
+          skills:
+            sql<string>`GROUP_CONCAT(${tables.project.projectSkill.skill}, '__,__')`.as(
+              "skills",
+            ),
+        })
+        .from(tables.project.project)
+        .innerJoin(
+          tables.user.user,
+          eq(tables.user.user.id, tables.project.project.ownerId),
+        )
+        .leftJoin(
+          tables.project.projectSkill,
+          eq(tables.project.projectSkill.projectId, tables.project.project.id),
+        )
+        .groupBy(tables.project.project.id)
+        .where(eq(tables.project.project.ownerId, ownerId))
+        .all();
+
+      return projects.map((row) => ({
+        ...row,
+        skills: row.skills ? row.skills.split("__,__") : [],
+      }));
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error(error);
+      return [];
+    }
+  }
+
+  /**
    * Fetches all skills of a project by its id.
    *
    * @param id The ID of the project
