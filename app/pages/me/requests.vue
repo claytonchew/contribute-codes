@@ -4,8 +4,9 @@
       <UContainer>
         <div class="space-y-8">
           <div>
-            <h1 class="text-xl font-semibold">Requests</h1>
-            <span class="mt-1 block text-gray-600 dark:text-gray-300">
+            <h1 class="text-lg font-semibold sm:text-xl">Requests</h1>
+            <span
+              class="mt-1 block text-sm text-gray-600 sm:text-base dark:text-gray-300">
               Manage all requests from other users.
             </span>
           </div>

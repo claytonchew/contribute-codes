@@ -1,61 +1,72 @@
 <template>
   <div>
-    <UTable
-      :columns="columns"
-      :rows="data"
-      :empty-state="{
-        icon: 'heroicons:document-text',
-        label: 'There\'s no pending contributor requests.',
-      }"
-      :ui="{
-        emptyState: { wrapper: 'py-2', icon: 'mb-1' },
-      }">
-      <template #createdAt-data="{ row }">
-        <span>
-          {{
-            new Date(row.createdAt).toLocaleDateString("en", {
-              day: "numeric",
-              month: "short",
-              year: "numeric",
-            })
-          }}
-        </span>
-      </template>
-      <template #requester-data="{ row }">
-        <span>
-          <strong>{{ row.requester.name }}</strong> wants to add
-          <strong>you</strong> as a contributor.
-        </span>
-      </template>
-      <template #project-data="{ row }">
-        <UButton
-          :to="`/project/${row.project.id}`"
-          variant="link"
-          :padded="false">
-          <span class="block max-w-80 truncate">
-            {{ row.project.title }}
+    <div class="grid grid-cols-1 gap-4 md:hidden">
+      <MeTableContributorRequestsCard
+        v-for="request in data"
+        :key="request"
+        :request="request"
+        :accept="acceptRequest"
+        :decline="declineRequest" />
+    </div>
+
+    <UCard :ui="{ body: { padding: '' } }" class="hidden md:block">
+      <UTable
+        :columns="columns"
+        :rows="data"
+        :empty-state="{
+          icon: 'heroicons:document-text',
+          label: 'There\'s no pending contributor requests.',
+        }"
+        :ui="{
+          emptyState: { wrapper: 'py-2', icon: 'mb-1' },
+        }">
+        <template #createdAt-data="{ row }">
+          <span class="text-sm">
+            {{
+              new Date(row.createdAt).toLocaleDateString("en", {
+                day: "numeric",
+                month: "short",
+                year: "numeric",
+              })
+            }}
           </span>
-        </UButton>
-      </template>
-      <template #actions-data="{ row }">
-        <div class="flex gap-4">
+        </template>
+        <template #requester-data="{ row }">
+          <span>
+            <strong>{{ row.requester.name }}</strong> wants to add
+            <strong>you</strong> as a contributor.
+          </span>
+        </template>
+        <template #project-data="{ row }">
           <UButton
-            color="green"
-            variant="ghost"
-            icon="heroicons:check"
-            label="Accept"
-            :loading="row.loading"
-            @click="acceptRequest(row)" />
-          <UButton
-            color="red"
-            variant="ghost"
-            icon="heroicons:x-mark"
-            label="Decline"
-            :loading="row.loading"
-            @click="declineRequest(row)" />
-        </div>
-      </template>
-    </UTable>
+            :to="`/project/${row.project.id}`"
+            variant="link"
+            :padded="false">
+            <span class="block max-w-80 truncate">
+              {{ row.project.title }}
+            </span>
+          </UButton>
+        </template>
+        <template #actions-data="{ row }">
+          <div class="flex gap-4">
+            <UButton
+              color="green"
+              variant="ghost"
+              icon="heroicons:check"
+              label="Accept"
+              :loading="row.loading"
+              @click="acceptRequest(row)" />
+            <UButton
+              color="red"
+              variant="ghost"
+              icon="heroicons:x-mark"
+              label="Decline"
+              :loading="row.loading"
+              @click="declineRequest(row)" />
+          </div>
+        </template>
+      </UTable>
+    </UCard>
   </div>
 </template>
 

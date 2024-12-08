@@ -24,7 +24,7 @@
           <span class="text-sm text-gray-500 dark:text-gray-400">
             Skills Wanted
           </span>
-          <div class="flex gap-1">
+          <div class="flex flex-wrap gap-1">
             <UBadge
               v-for="skill in props.project.skills.slice(0, 3)"
               :key="skill"
