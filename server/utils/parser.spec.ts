@@ -15,8 +15,6 @@ Hashtag in #heading
 
 Hello world foo bar link - the quick brown fox jumps over the lazy dog.
 
-image
-
 Blockquote
 Blockquote Line 2
 
@@ -54,7 +52,7 @@ footnote
   it("should flatten all lines to single space", () => {
     const input = MARKDOWN_SAMPLE;
     const expectedOutput =
-      'Heading 1 Heading 2 Heading 3 Hashtag in #heading Hello world foo bar link - the quick brown fox jumps over the lazy dog. image Blockquote Blockquote Line 2 HTML non-matching* tags List item List item List item List item List item List item List item List item List item { "key": "value", "key2": { "nested": "value" } } footnote';
+      'Heading 1 Heading 2 Heading 3 Hashtag in #heading Hello world foo bar link - the quick brown fox jumps over the lazy dog. Blockquote Blockquote Line 2 HTML non-matching* tags List item List item List item List item List item List item List item List item List item { "key": "value", "key2": { "nested": "value" } } footnote';
 
     const output = stripMarkdown(input, { flattenLineToSingleSpace: true });
 
@@ -80,7 +78,7 @@ const MARKDOWN_SAMPLE = `
 
 # Hashtag in #heading
 
-**Hello** _world_ ~~foo~~ \`bar\` [link](https://example.com) - *the* ***quick brown*** fox **jumps over** the ~~lazy dog~~.
+**Hello** _world_ ~~foo~~ \`bar\` [link](https://example.com) - *the* ***quick brown*** fox **jumps over** the ~~lazy dog~~.{prop="value"}
 
 ![image](image.jpg)
 

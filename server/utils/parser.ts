@@ -41,7 +41,8 @@ export const stripMarkdown = (
     .replace(/\[\^.+?\](: .*?$)?/g, "")
     .replace(/\s{0,2}\[.*?\]: .*?$/g, "")
     // remove images
-    .replace(/!\[(.*?)\][[(].*?[\])]/g, "$1")
+    // .replace(/!\[(.*?)\][[(].*?[\])]/g, "$1")
+    .replace(/!\[(.*?)\][[(].*?[\])]/g, "")
     // remove inline links
     .replace(/\[([^\]]*?)\][[(].*?[\])]/g, "$1")
     // remove blockquotes
@@ -66,7 +67,9 @@ export const stripMarkdown = (
     // replace two or more newlines with exactly two
     .replace(/\n{2,}/g, "\n\n")
     // replace strike through
-    .replace(/~(.*?)~/g, "$1");
+    .replace(/~(.*?)~/g, "$1")
+    // remove any { } inline modifiers
+    .replace(/{.*?}/g, "");
 
   if (options.flattenLineToSingleSpace) {
     output = output
