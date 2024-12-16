@@ -6,9 +6,6 @@ import {
   exists,
   and,
   type InferInsertModel,
-  inArray,
-  getTableColumns,
-  isNotNull,
 } from "drizzle-orm";
 
 class ProjectService {
@@ -51,31 +48,11 @@ class ProjectService {
         return null;
       }
 
-      const contributorsData = await useDB()
-        .select({
-          id: tables.user.user.id,
-          name: tables.user.user.name,
-          avatar: tables.user.user.avatar,
-        })
-        .from(tables.project.projectContributor)
-        .where(
-          and(
-            eq(tables.project.projectContributor.projectId, id),
-            isNotNull(tables.project.projectContributor.acceptedAt),
-          ),
-        )
-        .innerJoin(
-          tables.user.user,
-          eq(tables.user.user.id, tables.project.projectContributor.userId),
-        )
-        .all();
-
       // reduce rows into the desired structure
       const project = {
         ...projectData.project,
         owner: projectData.owner,
         skills: projectData.skills ? projectData.skills.split("__,__") : [],
-        contributors: contributorsData,
       };
 
       return project;
@@ -89,7 +66,7 @@ class ProjectService {
   /**
    * Fetches all projects with pagination, sorting, and filtering.
    *
-   * Note: This method does not fetch the `content` and `contributors` of the projects.
+   * Note: This method does not fetch the `content` of the projects.
    *
    * @param options Object containing pageOptions, sort, and filters
    * @param options.pageOptions Pagination options including page and perPage
@@ -315,36 +292,6 @@ class ProjectService {
   }
 
   /**
-   * Fetches all contributors of a project by its id.
-   *
-   * @param id The ID of the project
-   * @returns A promise that resolves to an array of contributors
-   */
-  async getContributorsById(id: string) {
-    try {
-      const contributors = await useDB()
-        .select({
-          ...getTableColumns(tables.user.user),
-          acceptedAt: tables.project.projectContributor.acceptedAt,
-          requestedBy: tables.project.projectContributor.requestedBy,
-        })
-        .from(tables.project.projectContributor)
-        .where(eq(tables.project.projectContributor.projectId, id))
-        .innerJoin(
-          tables.user.user,
-          eq(tables.user.user.id, tables.project.projectContributor.userId),
-        )
-        .all();
-
-      return contributors;
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error(error);
-      return [];
-    }
-  }
-
-  /**
    * Create a new project
    *
    * @param data The data of the project to create
@@ -425,105 +372,6 @@ class ProjectService {
           .all();
 
         return newSkills;
-      });
-
-      return records;
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error(error);
-      throw error;
-    }
-  }
-
-  /**
-   * Update project contributors
-   *
-   * @param id The ID of the project
-   * @param contributors The list of contributors to update
-   * @param requesterId The ID of the user who requested the update
-   * @returns A promise that resolves to an object containing old and new contributors
-   * @throws Error if update fails
-   */
-  async updateContributors(
-    id: string,
-    contributors: string[],
-    requesterId: string,
-  ) {
-    try {
-      const records = await useDB().transaction(async (tx) => {
-        const project = await tx
-          .select()
-          .from(tables.project.project)
-          .where(eq(tables.project.project.id, id))
-          .get();
-
-        if (!project) {
-          throw createError({
-            statusCode: 404,
-            statusMessage: "Project not found.",
-          });
-        }
-
-        const existingContributors = await tx
-          .select({
-            ...getTableColumns(tables.user.user),
-            acceptedAt: tables.project.projectContributor.acceptedAt,
-            requestedBy: tables.project.projectContributor.requestedBy,
-          })
-          .from(tables.project.projectContributor)
-          .where(eq(tables.project.projectContributor.projectId, id))
-          .innerJoin(
-            tables.user.user,
-            eq(tables.user.user.id, tables.project.projectContributor.userId),
-          )
-          .all();
-
-        // remove existing contributors that are not in the new list
-        await tx.delete(tables.project.projectContributor).where(
-          and(
-            inArray(
-              tables.project.projectContributor.userId,
-              existingContributors
-                .filter((contributor) => !contributors.includes(contributor.id))
-                .map((contributor) => contributor.id),
-            ),
-            eq(tables.project.projectContributor.projectId, id),
-          ),
-        );
-
-        // insert new contributors
-        if (contributors.length > 0) {
-          await tx
-            .insert(tables.project.projectContributor)
-            .values(
-              contributors.map((userId) => ({
-                projectId: id,
-                userId,
-                acceptedAt: userId === project.ownerId ? new Date() : null,
-                requestedBy: requesterId,
-              })),
-            )
-            .onConflictDoNothing();
-        }
-
-        const newContributors = await tx
-          .select({
-            ...getTableColumns(tables.user.user),
-            acceptedAt: tables.project.projectContributor.acceptedAt,
-            requestedBy: tables.project.projectContributor.requestedBy,
-          })
-          .from(tables.project.projectContributor)
-          .where(eq(tables.project.projectContributor.projectId, id))
-          .innerJoin(
-            tables.user.user,
-            eq(tables.user.user.id, tables.project.projectContributor.userId),
-          )
-          .all();
-
-        return {
-          old: existingContributors,
-          new: newContributors,
-        };
       });
 
       return records;

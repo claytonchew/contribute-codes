@@ -4,7 +4,6 @@ import userData from "~~/database/seed/data/tests/user.json";
 import oAuthAccountData from "~~/database/seed/data/tests/oauth_account.json";
 import projectData from "~~/database/seed/data/tests/project.json";
 import projectSkillData from "~~/database/seed/data/tests/project_skill.json";
-import projectContributorData from "~~/database/seed/data/tests/project_contributor.json";
 
 export default {
   seed: async (tx) => {
@@ -60,18 +59,6 @@ export default {
         projectSkillData.map((data) => ({
           projectId: data.project_id,
           skill: data.skill,
-          createdAt: new Date(data.created_at * 1000),
-          updatedAt: new Date(data.updated_at * 1000),
-        })),
-      )
-      .onConflictDoNothing()
-      .run();
-    await tx
-      .insert(tables.project.projectContributor)
-      .values(
-        projectContributorData.map((data) => ({
-          projectId: data.project_id,
-          userId: data.user_id,
           createdAt: new Date(data.created_at * 1000),
           updatedAt: new Date(data.updated_at * 1000),
         })),

@@ -7,7 +7,7 @@
             <h1 class="text-lg font-semibold sm:text-xl">Requests</h1>
             <span
               class="mt-1 block text-sm text-gray-600 sm:text-base dark:text-gray-300">
-              Manage all requests from other users.
+              Manage all requests.
             </span>
           </div>
           <UHorizontalNavigation
@@ -28,20 +28,20 @@ useSeoMeta({
 
 const links = [
   {
-    label: "Contributors",
-    icon: "heroicons:user-plus",
-    to: "/me/requests/contributors",
+    label: "Your Requests",
+    icon: "heroicons:identification",
+    to: "/me/requests/your-requests",
     exact: true,
   },
   {
-    label: "Volunteers",
+    label: "Volunteer Requests",
     icon: "heroicons:user-group",
-    to: "/me/requests/volunteers",
+    to: "/me/requests/volunteer-requests",
     exact: true,
   },
 ];
 
 if (useRoute().path === "/me/requests") {
-  navigateTo("/me/requests/contributors");
+  navigateTo("/me/requests/your-requests");
 }
 </script>

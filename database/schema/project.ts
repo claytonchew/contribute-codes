@@ -55,32 +55,3 @@ export const projectSkill = sqliteTable(
     primaryKey: primaryKey({ columns: [table.projectId, table.skill] }),
   }),
 );
-
-export const projectContributor = sqliteTable(
-  "project_contributor",
-  (t) => ({
-    projectId: t
-      .text()
-      .notNull()
-      .references(() => project.id, { onDelete: "cascade" }),
-    userId: t
-      .text()
-      .notNull()
-      .references(() => user.user.id, { onDelete: "cascade" }),
-    createdAt: t
-      .integer({ mode: "timestamp" })
-      .notNull()
-      .$default(() => new Date()),
-    updatedAt: t
-      .integer({ mode: "timestamp" })
-      .notNull()
-      .$onUpdate(() => new Date()),
-    requestedBy: t.text().references(() => user.user.id, {
-      onDelete: "cascade",
-    }),
-    acceptedAt: t.integer({ mode: "timestamp" }),
-  }),
-  (table) => ({
-    primaryKey: primaryKey({ columns: [table.projectId, table.userId] }),
-  }),
-);

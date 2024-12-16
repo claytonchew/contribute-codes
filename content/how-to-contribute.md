@@ -25,11 +25,9 @@ description: At Contribute.Codes, contributing to a project is simple and straig
    - Project overview and objectives
    - Required skill sets or volunteer roles
    - URLs to your repository and/or project website
-3. **Add Contributors**  
-   If you already have contributors working on your project, you can add contributions by adding their profiles to your project. This helps acknowledge their efforts and encourages others to join in.
-4. **Manage Volunteer Requests**  
-   Volunteers interested in your project will submit requests through the platform. You’ll receive an email notification when someone wants to contribute. Review their contact information and personal details, and decide if they’re a good fit for your project.
-5. **Engage and Collaborate**  
+3. **Manage Volunteer Requests**  
+   Volunteers interested in your project will submit requests through the platform. You can choose to enable email notification when someone requests to contribute. Review their information, and decide if they’re a good fit for your project.
+4. **Engage and Collaborate**  
    Stay in touch with your volunteers, provide guidance, and keep the project moving forward. Collaboration is key to making your project successful and impactful.
 
 ---
