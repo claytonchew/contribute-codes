@@ -36,7 +36,7 @@ export default defineEventHandler(async (event) => {
     return {
       ...project,
       contributors: contributors
-        .filter((c) => !c.username.includes("[bot]"))
+        .filter((c) => !c.username.endsWith("[bot]"))
         .map(
           (c) =>
             <
