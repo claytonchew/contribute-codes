@@ -29,5 +29,5 @@ export const projectSchema = z.object({
     .max(10000, "Cannot be more than 10000 characters"),
   repositoryUrl: z.string().url().optional().nullable(),
   projectUrl: z.string().url().optional().nullable(),
-  skills: z.array(z.string()),
+  skills: z.array(z.string()).nonempty("Must choose at least 1."),
 });

@@ -21,7 +21,7 @@
       :state="state"
       class="space-y-4"
       @submit="onSubmit">
-      <UFormGroup label="Skills Wanted" name="skills" size="lg">
+      <UFormGroup label="Skills Wanted" name="skills" size="lg" required>
         <USelectMenu
           v-model="state.skills"
           multiple
@@ -84,7 +84,9 @@ const emits = defineEmits<{
 const toast = useToast();
 const loading = ref(false);
 
-const schema = z.object({ skills: z.string().array() });
+const schema = z.object({
+  skills: z.string().array().nonempty("Must choose at least 1."),
+});
 type Schema = z.output<typeof schema>;
 
 const form = useTemplateRef<Form<Schema>>("form");

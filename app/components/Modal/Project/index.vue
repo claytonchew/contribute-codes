@@ -71,7 +71,7 @@
             v-model="state.projectUrl"
             placeholder="https://example.com" />
         </UFormGroup>
-        <UFormGroup label="Skills Wanted" name="skills" size="lg">
+        <UFormGroup label="Skills Wanted" name="skills" size="lg" required>
           <USelectMenu
             v-model="state.skills"
             multiple
