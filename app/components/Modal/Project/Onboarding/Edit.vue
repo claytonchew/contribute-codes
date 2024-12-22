@@ -29,8 +29,8 @@
         <template #hint>
           <UButton
             :label="showPreview ? 'Editor' : 'Preview'"
-            variant="link"
-            size="sm"
+            variant="ghost"
+            size="xs"
             @click="showPreview = !showPreview" />
         </template>
         <div
