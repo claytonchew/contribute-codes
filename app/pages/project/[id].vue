@@ -6,9 +6,7 @@
           <UAlert
             v-if="data.isPublished"
             icon="heroicons:check-badge"
-            color="primary"
-            variant="outline"
-            title="This project is published live."
+            title="Project published."
             :actions="[
               {
                 variant: 'ghost',
@@ -27,11 +25,15 @@
                   editProjectModal = true;
                 },
               },
-            ]" />
+            ]"
+            :ui="{
+              title: 'text-green-600 dark:text-green-400',
+              icon: { base: 'text-green-600 dark:text-green-400' },
+            }" />
           <UAlert
             v-else-if="!data.isPublished"
             color="primary"
-            variant="outline"
+            variant="subtle"
             icon="heroicons:information-circle"
             title="This project is not published."
             :actions="[
@@ -53,7 +55,10 @@
                 loading: publishIsLoading,
                 click: publishProject,
               },
-            ]" />
+            ]"
+            :ui="{
+              variant: { subtle: 'dark:bg-opacity-5 bg-opacity-20' },
+            }" />
         </div>
       </template>
 
