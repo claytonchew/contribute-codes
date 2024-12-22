@@ -26,6 +26,7 @@ export const project = sqliteTable("project", (t) => ({
     .text()
     .notNull()
     .references(() => user.user.id, { onDelete: "cascade" }),
+  isPublished: t.integer({ mode: "boolean" }).notNull().default(false),
 }));
 
 export const projectSkill = sqliteTable(

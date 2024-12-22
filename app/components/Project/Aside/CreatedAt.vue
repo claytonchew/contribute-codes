@@ -2,7 +2,7 @@
   <div>
     <span
       class="mb-1 block text-xs font-medium text-gray-500 dark:text-gray-400">
-      Published At
+      Created At
     </span>
     <span class="text-sm font-medium">
       {{

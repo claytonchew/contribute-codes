@@ -75,7 +75,7 @@ class ProjectService {
    * @returns A promise that that resolves to an object containing records and pagination
    * @throws Error if query fails
    */
-  async getAll(options: ProjectGetAllOptions = {}) {
+  async getAll(options: ProjectGetAllOptions = {}, includeUnpublished = false) {
     try {
       const { pageOptions, sort, filters } = options;
 
@@ -122,9 +122,14 @@ class ProjectService {
           ? query.orderBy(asc(tables.project.project.createdAt))
           : query.orderBy(desc(tables.project.project.createdAt)); // default to newest
 
+      const conditions = [];
+
+      if (!includeUnpublished) {
+        conditions.push(eq(tables.project.project.isPublished, true));
+      }
+
       // apply filters
       if (filters?.skill || filters?.ownerId) {
-        const conditions = [];
         if (filters.skill) {
           conditions.push(
             exists(
@@ -146,9 +151,11 @@ class ProjectService {
         if (filters.ownerId) {
           conditions.push(eq(tables.project.project.ownerId, filters.ownerId));
         }
-        query = query.where(and(...conditions));
       }
 
+      if (conditions.length) {
+        query = query.where(and(...conditions));
+      }
       const rows = await query.limit(perPage).offset(offset).all();
 
       // get total count of projects
@@ -165,30 +172,7 @@ class ProjectService {
         )
         .$dynamic();
 
-      // apply filters
-      if (filters?.skill || filters?.ownerId) {
-        const conditions = [];
-        if (filters.skill) {
-          conditions.push(
-            exists(
-              useDB()
-                .select()
-                .from(tables.project.projectSkill)
-                .where(
-                  and(
-                    eq(
-                      tables.project.projectSkill.projectId,
-                      tables.project.project.id,
-                    ),
-                    eq(tables.project.projectSkill.skill, filters.skill),
-                  ),
-                ),
-            ),
-          );
-        }
-        if (filters.ownerId) {
-          conditions.push(eq(tables.project.project.ownerId, filters.ownerId));
-        }
+      if (conditions.length) {
         totalCountQuery = totalCountQuery.where(and(...conditions));
       }
 
@@ -241,6 +225,7 @@ class ProjectService {
             sql<string>`GROUP_CONCAT(${tables.project.projectSkill.skill}, '__,__')`.as(
               "skills",
             ),
+          isPublished: tables.project.project.isPublished,
         })
         .from(tables.project.project)
         .innerJoin(

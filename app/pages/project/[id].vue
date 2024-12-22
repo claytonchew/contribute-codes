@@ -1,26 +1,61 @@
 <template>
   <ProjectPageContainer>
     <template #main>
-      <div class="mb-8 flex justify-between gap-4">
-        <div class="flex items-center gap-2">
-          <UButton
-            to="/"
-            icon="heroicons:arrow-long-left-16-solid"
-            variant="link"
-            color="black"
-            :padded="false">
-            Explore other projects
-          </UButton>
+      <template v-if="isOwner">
+        <div class="mb-8 flex justify-between gap-4">
+          <UAlert
+            v-if="data.isPublished"
+            icon="heroicons:check-badge"
+            color="primary"
+            variant="outline"
+            title="This project is published live."
+            :actions="[
+              {
+                variant: 'ghost',
+                color: 'primary',
+                size: 'sm',
+                label: 'Unpublish',
+                loading: unpublishIsLoading,
+                click: unpublishProject,
+              },
+              {
+                variant: 'soft',
+                color: 'primary',
+                size: 'sm',
+                label: 'Edit Project',
+                click: () => {
+                  editProjectModal = true;
+                },
+              },
+            ]" />
+          <UAlert
+            v-else-if="!data.isPublished"
+            color="primary"
+            variant="outline"
+            icon="heroicons:information-circle"
+            title="This project is not published."
+            :actions="[
+              {
+                variant: 'soft',
+                color: 'primary',
+                size: 'sm',
+                label: 'Edit Project',
+                click: () => {
+                  editProjectModal = true;
+                },
+              },
+              {
+                icon: 'heroicons:rocket-launch-solid',
+                variant: 'solid',
+                color: 'primary',
+                size: 'sm',
+                label: 'Publish Now',
+                loading: publishIsLoading,
+                click: publishProject,
+              },
+            ]" />
         </div>
-
-        <UButton
-          v-if="isOwner"
-          icon="heroicons:pencil-square"
-          label="Edit"
-          variant="ghost"
-          size="sm"
-          @click="editProjectModal = true" />
-      </div>
+      </template>
 
       <ProjectContent v-if="data" :data="data" />
     </template>
@@ -28,7 +63,7 @@
     <template #aside>
       <div v-if="data" class="space-y-6">
         <ProjectAsideProjectOwner :data="data" />
-        <ProjectAsidePublishedAt :data="data" />
+        <ProjectAsideCreatedAt :data="data" />
         <ProjectAsideRepositoryURL :data="data" />
         <ProjectAsideProjectSite :data="data" />
       </div>
@@ -38,7 +73,7 @@
       <ProjectAsideContributors v-if="data" :data="data" @refresh="refresh" />
 
       <div class="space-y-2">
-        <ProjectShare />
+        <ProjectShare v-if="data.isPublished" />
         <UButton v-if="!isOwner" color="black" size="lg" block>
           Volunteer this project
         </UButton>
@@ -81,6 +116,7 @@
 import markdownParser from "@nuxt/content/transformers/markdown";
 
 const route = useRoute();
+const toast = useToast();
 
 const { data, error, refresh } = await useAsyncData(() =>
   useRequestFetch()("/api/project", {
@@ -97,8 +133,8 @@ whenever(
   error,
   () => {
     showError({
-      statusCode: 404,
-      statusMessage: "Project not found",
+      statusCode: error.value?.statusCode || 404,
+      statusMessage: error.value?.statusMessage || "Project not found",
       fatal: true,
     });
   },
@@ -118,5 +154,65 @@ const editProjectModal = ref(false);
 const deleteProjectModal = ref(false);
 const handlePostDelete = () => {
   navigateTo("/");
+};
+
+const publishIsLoading = ref(false);
+const publishProject = async () => {
+  if (isOwner.value) {
+    publishIsLoading.value = true;
+    await $fetch("/api/project/publish", {
+      method: "POST",
+      query: { id: data.value.id },
+    })
+      .then(() => {
+        toast.add({
+          title: "Successful",
+          description: "Your project is now live.",
+          color: "green",
+        });
+        data.value.isPublished = true;
+        refresh();
+      })
+      .catch(() => {
+        toast.add({
+          title: "Error",
+          description: "Failed to publish project.",
+          color: "red",
+        });
+      })
+      .finally(() => {
+        publishIsLoading.value = false;
+      });
+  }
+};
+
+const unpublishIsLoading = ref(false);
+const unpublishProject = async () => {
+  if (isOwner.value) {
+    unpublishIsLoading.value = true;
+    await $fetch("/api/project/unpublish", {
+      method: "POST",
+      query: { id: data.value.id },
+    })
+      .then(() => {
+        toast.add({
+          title: "Successful",
+          description: "Project unpublished.",
+          color: "green",
+        });
+        data.value.isPublished = false;
+        refresh();
+      })
+      .catch(() => {
+        toast.add({
+          title: "Error",
+          description: "Failed to unpublish project.",
+          color: "red",
+        });
+      })
+      .finally(() => {
+        unpublishIsLoading.value = false;
+      });
+  }
 };
 </script>

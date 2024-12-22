@@ -63,6 +63,20 @@
             </UBadge>
           </div>
         </template>
+        <template #isPublished-data="{ row }">
+          <UIcon
+            :name="
+              row.isPublished
+                ? 'heroicons:check-circle-solid'
+                : 'heroicons:x-circle-solid'
+            "
+            class="h-6 w-6"
+            :class="{
+              'text-green-500 dark:text-green-400': row.isPublished,
+              'text-gray-400 dark:text-gray-600': !row.isPublished,
+            }"
+            size="lg" />
+        </template>
       </UTable>
     </UCard>
   </div>
@@ -76,7 +90,7 @@ const { data } = await useAsyncData("me/projects", () =>
 const columns = [
   {
     key: "createdAt",
-    label: "Published",
+    label: "Created",
   },
   {
     key: "title",
@@ -85,6 +99,10 @@ const columns = [
   {
     key: "skills",
     label: "Skills Wanted",
+  },
+  {
+    key: "isPublished",
+    label: "Published",
   },
 ];
 </script>

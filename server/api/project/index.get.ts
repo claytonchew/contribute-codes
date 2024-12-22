@@ -4,6 +4,8 @@ import { parseRepositoryURL } from "~~/app/utils/parser";
 
 export default defineEventHandler(async (event) => {
   try {
+    const { user } = await getUserSession(event);
+
     const { id } = await getValidatedQuery(
       event,
       z.object({ id: z.string() }).parse,
@@ -14,7 +16,14 @@ export default defineEventHandler(async (event) => {
     if (!project) {
       throw createError({
         statusCode: 404,
-        message: "Project not found",
+        statusMessage: "Project not found",
+      });
+    }
+
+    if (!project.isPublished && project.ownerId !== user?.id) {
+      throw createError({
+        statusCode: 403,
+        statusMessage: "Project not published",
       });
     }
 
