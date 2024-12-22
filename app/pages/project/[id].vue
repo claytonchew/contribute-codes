@@ -2,63 +2,84 @@
   <ProjectPageContainer>
     <template #main>
       <template v-if="isOwner">
-        <div class="mb-8 flex justify-between gap-4">
+        <div class="mb-8 space-y-4">
           <UAlert
             v-if="data.isPublished"
-            icon="heroicons:check-badge"
-            title="Project published."
-            :actions="[
-              {
-                variant: 'ghost',
-                color: 'primary',
-                size: 'sm',
-                label: 'Unpublish',
-                loading: unpublishIsLoading,
-                click: unpublishProject,
-              },
-              {
-                variant: 'soft',
-                color: 'primary',
-                size: 'sm',
-                label: 'Edit Project',
-                click: () => {
-                  editProjectModal = true;
-                },
-              },
-            ]"
+            color="green"
+            variant="outline"
+            :actions="publishedActions"
             :ui="{
               title: 'text-green-600 dark:text-green-400',
-              icon: { base: 'text-green-600 dark:text-green-400' },
-            }" />
+              actions: 'hidden sm:flex',
+              icon: {
+                base: 'text-green-600 dark:text-green-400 hidden sm:block',
+              },
+            }">
+            <template #title>
+              <div class="space-y-3">
+                <div class="flex items-center gap-3">
+                  <UIcon
+                    name="heroicons:check-badge"
+                    class="h-5 w-5 flex-shrink-0" />
+                  <span>Project published.</span>
+                </div>
+                <div class="flex items-center gap-2 sm:hidden">
+                  <UButton
+                    v-for="action in publishedActions"
+                    :key="action.label"
+                    :ui="{ size: 'xs' }"
+                    v-bind="action"
+                    @click.stop="action.click" />
+                </div>
+              </div>
+            </template>
+          </UAlert>
           <UAlert
             v-else-if="!data.isPublished"
             color="primary"
+            variant="outline"
+            :actions="unpublishedActions"
+            :ui="{
+              actions: 'hidden sm:flex',
+            }">
+            <template #title>
+              <div class="space-y-3">
+                <div class="flex items-center gap-3">
+                  <UIcon
+                    name="heroicons:information-circle"
+                    class="h-5 w-5 flex-shrink-0" />
+                  <span>This project is not published.</span>
+                </div>
+                <div class="flex items-center gap-2 sm:hidden">
+                  <UButton
+                    v-for="action in unpublishedActions"
+                    :key="action.label"
+                    :ui="{ size: 'xs' }"
+                    v-bind="action"
+                    @click.stop="action.click" />
+                </div>
+              </div>
+            </template>
+          </UAlert>
+
+          <UAlert
+            v-if="!data.onboarding"
+            color="primary"
             variant="subtle"
-            icon="heroicons:information-circle"
-            title="This project is not published."
+            icon="heroicons:sparkles"
+            title='Enable "Contribute" button'
+            description="Setup onboarding to help potential contributors navigate your project and understand how they can contribute."
             :actions="[
               {
-                variant: 'soft',
-                color: 'primary',
-                size: 'sm',
-                label: 'Edit Project',
-                click: () => {
-                  editProjectModal = true;
-                },
-              },
-              {
-                icon: 'heroicons:rocket-launch-solid',
                 variant: 'solid',
                 color: 'primary',
                 size: 'sm',
-                label: 'Publish Now',
-                loading: publishIsLoading,
-                click: publishProject,
+                label: 'Setup Onboarding',
+                click: () => {
+                  editProjectOnboarding = true;
+                },
               },
-            ]"
-            :ui="{
-              variant: { subtle: 'dark:bg-opacity-5 bg-opacity-20' },
-            }" />
+            ]" />
         </div>
       </template>
 
@@ -78,10 +99,18 @@
       <ProjectAsideContributors v-if="data" :data="data" @refresh="refresh" />
 
       <div class="space-y-2">
-        <ProjectShare v-if="data.isPublished" />
-        <UButton v-if="!isOwner" color="black" size="lg" block>
-          Volunteer this project
+        <ProjectShare />
+        <UButton
+          v-if="data.onboarding"
+          color="black"
+          size="lg"
+          block
+          @click="showContributeOnboarding = true">
+          Contribute
         </UButton>
+      </div>
+
+      <div v-if="isOwner">
         <UButton
           v-if="isOwner"
           icon="heroicons:trash"
@@ -114,6 +143,24 @@
         @close="deleteProjectModal = false"
         @on-complete="handlePostDelete" />
     </UModal>
+    <UModal
+      v-model="editProjectOnboarding"
+      :ui="{ width: 'w-full max-w-xl', strategy: 'override' }">
+      <ModalProjectOnboardingEdit
+        v-if="data"
+        :id="data.id"
+        :initial-state="data.onboarding"
+        @close="editProjectOnboarding = false"
+        @refresh="refresh" />
+    </UModal>
+    <USlideover
+      v-if="data.onboarding"
+      v-model="showContributeOnboarding"
+      :ui="{ width: 'max-w-xl' }">
+      <ProjectSlideoverContribute
+        :onboarding="data.onboarding"
+        @close="showContributeOnboarding = false" />
+    </USlideover>
   </ProjectPageContainer>
 </template>
 
@@ -130,6 +177,15 @@ const { data, error, refresh } = await useAsyncData(() =>
     return {
       ...res,
       renderedContent: await markdownParser.parse(res?.id, res?.content),
+      ...(res.onboarding && {
+        onboarding: {
+          ...res.onboarding,
+          renderedOrientationContent: await markdownParser.parse(
+            res.onboarding.projectId + "-orientation",
+            res.onboarding.orientationContent,
+          ),
+        },
+      }),
     };
   }),
 );
@@ -150,6 +206,8 @@ useSeoMeta({
   title: data.value?.title,
 });
 
+const showContributeOnboarding = ref(false);
+
 const isOwner = computed(() => {
   return data.value?.owner?.id === useUserSession().user.value?.id;
 });
@@ -160,6 +218,8 @@ const deleteProjectModal = ref(false);
 const handlePostDelete = () => {
   navigateTo("/");
 };
+
+const editProjectOnboarding = ref(false);
 
 const publishIsLoading = ref(false);
 const publishProject = async () => {
@@ -220,4 +280,75 @@ const unpublishProject = async () => {
       });
   }
 };
+
+const publishedActions = computed(() => [
+  ...(data.value?.onboarding
+    ? [
+        {
+          variant: "solid",
+          color: "white",
+          size: "sm",
+          label: "Edit Onboarding",
+          click: () => {
+            editProjectOnboarding.value = true;
+          },
+        },
+      ]
+    : []),
+  {
+    variant: "solid",
+    color: "white",
+    size: "sm",
+    label: "Edit Project",
+    click: () => {
+      editProjectModal.value = true;
+    },
+  },
+  {
+    variant: "soft",
+    color: "red",
+    size: "sm",
+    label: "Unpublish",
+    loading: unpublishIsLoading.value,
+    click: () => {
+      unpublishProject();
+    },
+  },
+]);
+
+const unpublishedActions = computed(() => [
+  ...(data.value.onboarding
+    ? [
+        {
+          variant: "solid",
+          color: "white",
+          size: "sm",
+          label: "Edit Onboarding",
+          click: () => {
+            editProjectOnboarding.value = true;
+          },
+        },
+      ]
+    : []),
+  {
+    variant: "solid",
+    color: "white",
+    size: "sm",
+    label: "Edit Project",
+    click: () => {
+      editProjectModal.value = true;
+    },
+  },
+  {
+    icon: "heroicons:rocket-launch-solid",
+    variant: "solid",
+    color: "primary",
+    size: "sm",
+    label: "Publish Now",
+    loading: publishIsLoading.value,
+    click: () => {
+      publishProject();
+    },
+  },
+]);
 </script>

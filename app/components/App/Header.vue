@@ -111,11 +111,6 @@ const userLinks = [
       icon: "heroicons:document-text",
       to: "/me/projects",
     },
-    {
-      label: "Requests",
-      icon: "heroicons:chat-bubble-bottom-center-text",
-      to: "/me/requests",
-    },
   ],
   [
     {

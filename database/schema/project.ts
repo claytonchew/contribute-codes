@@ -56,3 +56,20 @@ export const projectSkill = sqliteTable(
     primaryKey: primaryKey({ columns: [table.projectId, table.skill] }),
   }),
 );
+
+export const projectOnboarding = sqliteTable("project_onboarding", (t) => ({
+  projectId: t
+    .text()
+    .primaryKey()
+    .references(() => project.id, { onDelete: "cascade" }),
+  createdAt: t
+    .integer({ mode: "timestamp" })
+    .notNull()
+    .$default(() => new Date()),
+  updatedAt: t
+    .integer({ mode: "timestamp" })
+    .notNull()
+    .$onUpdate(() => new Date()),
+  orientationContent: t.text(),
+  callToActionUrl: t.text(),
+}));

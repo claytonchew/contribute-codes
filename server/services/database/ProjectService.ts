@@ -25,6 +25,7 @@ class ProjectService {
             name: tables.user.user.name,
             avatar: tables.user.user.avatar,
           },
+          onboarding: tables.project.projectOnboarding,
           skills:
             sql<string>`GROUP_CONCAT(${tables.project.projectSkill.skill}, '__,__')`.as(
               "skills",
@@ -40,6 +41,13 @@ class ProjectService {
           tables.project.projectSkill,
           eq(tables.project.projectSkill.projectId, tables.project.project.id),
         )
+        .leftJoin(
+          tables.project.projectOnboarding,
+          eq(
+            tables.project.projectOnboarding.projectId,
+            tables.project.project.id,
+          ),
+        )
         .groupBy(tables.project.project.id)
         .get();
 
@@ -53,6 +61,7 @@ class ProjectService {
         ...projectData.project,
         owner: projectData.owner,
         skills: projectData.skills ? projectData.skills.split("__,__") : [],
+        onboarding: projectData.onboarding,
       };
 
       return project;
@@ -307,7 +316,12 @@ class ProjectService {
    */
   async update(
     id: string,
-    data: Partial<InferInsertModel<typeof tables.project.project>>,
+    data: Partial<
+      Omit<
+        InferInsertModel<typeof tables.project.project>,
+        "id" | "createdAt" | "updatedAt"
+      >
+    >,
   ) {
     try {
       const project = await useDB()
@@ -417,6 +431,48 @@ class ProjectService {
       // eslint-disable-next-line no-console
       console.error(error);
       return false;
+    }
+  }
+
+  /**
+   * Create or update project onboarding of a project.
+   *
+   * @param id The ID of the project
+   * @param data The data of the project onboarding to update or insert
+   * @returns A promise that resolves to the updated or inserted project onboarding
+   * @throws Error if query fails
+   */
+  async upsertProjectOnboarding(
+    id: string,
+    data: Partial<
+      Omit<
+        InferInsertModel<typeof tables.project.projectOnboarding>,
+        "projectId" | "createdAt" | "updatedAt"
+      >
+    >,
+  ) {
+    try {
+      const projectOnboarding = await useDB()
+        .insert(tables.project.projectOnboarding)
+        .values({
+          ...data,
+          projectId: id,
+        })
+        .onConflictDoUpdate({
+          target: tables.project.projectOnboarding.projectId,
+          set: {
+            ...data,
+            projectId: id,
+          },
+        })
+        .returning()
+        .get();
+
+      return projectOnboarding;
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error(error);
+      throw error;
     }
   }
 }

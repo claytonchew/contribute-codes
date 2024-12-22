@@ -31,3 +31,11 @@ export const projectSchema = z.object({
   projectUrl: z.string().url().optional().nullable(),
   skills: z.array(z.string()).nonempty("Must choose at least 1."),
 });
+
+export const projectOnboardingSchema = z.object({
+  orientationContent: z
+    .string()
+    .min(1, "Required")
+    .max(10000, "Cannot be more than 10000 characters"),
+  callToActionUrl: z.string().url().optional(),
+});

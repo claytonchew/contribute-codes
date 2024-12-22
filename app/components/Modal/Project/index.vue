@@ -40,7 +40,7 @@
             <UButton
               :label="showPreview ? 'Editor' : 'Preview'"
               variant="link"
-              size="xs"
+              size="sm"
               @click="showPreview = !showPreview" />
           </template>
           <UCard
