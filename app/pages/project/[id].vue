@@ -9,11 +9,7 @@
             variant="outline"
             :actions="publishedActions"
             :ui="{
-              title: 'text-green-600 dark:text-green-400',
               actions: 'hidden sm:flex',
-              icon: {
-                base: 'text-green-600 dark:text-green-400 hidden sm:block',
-              },
             }">
             <template #title>
               <div class="space-y-3">
@@ -21,7 +17,7 @@
                   <UIcon
                     name="heroicons:check-badge"
                     class="h-5 w-5 flex-shrink-0" />
-                  <span>Project published.</span>
+                  <span class="text-sm font-semibold">Project published.</span>
                 </div>
                 <div class="flex items-center gap-2 sm:hidden">
                   <UButton
@@ -48,7 +44,9 @@
                   <UIcon
                     name="heroicons:information-circle"
                     class="h-5 w-5 flex-shrink-0" />
-                  <span>This project is not published.</span>
+                  <span class="text-sm font-semibold"
+                    >This project is not published.</span
+                  >
                 </div>
                 <div class="flex items-center gap-2 sm:hidden">
                   <UButton
