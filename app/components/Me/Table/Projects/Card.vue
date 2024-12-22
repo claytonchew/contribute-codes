@@ -22,7 +22,7 @@
         <div class="flex justify-start gap-6">
           <div class="flex-shrink-0 space-y-1">
             <span class="block text-sm text-gray-500 dark:text-gray-400">
-              Published
+              Created
             </span>
             <span class="block py-0.5 text-sm">
               {{
@@ -54,6 +54,23 @@
               </UBadge>
             </div>
           </div>
+          <div class="flex-shrink-0 space-y-1">
+            <span class="block text-sm text-gray-500 dark:text-gray-400">
+              Published
+            </span>
+            <UIcon
+              :name="
+                props.project.isPublished
+                  ? 'heroicons:check-circle-solid'
+                  : 'heroicons:x-circle-solid'
+              "
+              class="h-6 w-6"
+              :class="{
+                'text-green-500 dark:text-green-400': props.project.isPublished,
+                'text-gray-400 dark:text-gray-600': !props.project.isPublished,
+              }"
+              size="lg" />
+          </div>
         </div>
       </template>
     </UCard>
@@ -68,6 +85,7 @@ const props = defineProps<{
     title: string;
     snippet: string;
     skills: string[];
+    isPublished: boolean;
   };
 }>();
 </script>
