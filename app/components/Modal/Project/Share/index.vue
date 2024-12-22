@@ -19,7 +19,7 @@
       <UFormGroup label="Link" :ui="{ container: 'mt-2' }">
         <UButtonGroup class="flex w-full" size="lg">
           <UInput :model-value="pageUrl" readonly class="grow" />
-          <UseClipboard v-slot="{ copy, copied }" :source="pageUrl">
+          <UseClipboard v-slot="{ copy, copied }" :source="pageUrl" legacy>
             <UButton
               color="gray"
               :icon="
@@ -27,7 +27,7 @@
                   ? 'heroicons:check-badge'
                   : 'heroicons:clipboard-document'
               "
-              @click="copy()" />
+              @click.prevent="copy()" />
           </UseClipboard>
         </UButtonGroup>
       </UFormGroup>
