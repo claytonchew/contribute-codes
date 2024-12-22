@@ -3,7 +3,7 @@
     <template #header>
       <div class="flex justify-between gap-4">
         <span
-          class="block w-full truncate font-bold text-gray-700 dark:text-gray-300">
+          class="block w-full truncate font-semibold text-gray-700 dark:text-gray-300">
           Deleting {{ props.project.title }}
         </span>
         <UButton

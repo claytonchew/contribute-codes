@@ -3,7 +3,7 @@
     <UCard v-if="loggedIn">
       <template #header>
         <div class="flex justify-between gap-4">
-          <span class="font-bold text-gray-700 dark:text-gray-300">
+          <span class="font-semibold text-gray-700 dark:text-gray-300">
             {{ props.title }}
           </span>
           <UButton

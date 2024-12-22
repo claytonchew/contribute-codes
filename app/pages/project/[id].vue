@@ -97,7 +97,9 @@
       <ProjectAsideContributors v-if="data" :data="data" @refresh="refresh" />
 
       <div class="space-y-2">
-        <ProjectShare />
+        <UButton color="white" size="lg" block @click="showShare = true">
+          Share Project
+        </UButton>
         <UButton
           v-if="data.onboarding"
           color="black"
@@ -150,6 +152,10 @@
         :initial-state="data.onboarding"
         @close="editProjectOnboarding = false"
         @refresh="refresh" />
+    </UModal>
+
+    <UModal v-model="showShare" :ui="{ width: 'max-w-xl' }">
+      <ModalProjectShare :project="data" @close="showShare = false" />
     </UModal>
     <USlideover
       v-if="data.onboarding"
@@ -205,6 +211,7 @@ useSeoMeta({
 });
 
 const showContributeOnboarding = ref(false);
+const showShare = ref(false);
 
 const isOwner = computed(() => {
   return data.value?.owner?.id === useUserSession().user.value?.id;
