@@ -24,6 +24,10 @@ export default defineNuxtConfig({
     layoutTransition: { name: "layout", mode: "out-in" },
   },
 
+  ui: {
+    safelistColors: ["red", "green"],
+  },
+
   components: [{ path: "~/components/ui", pathPrefix: false }, "~/components"],
 
   content: {
