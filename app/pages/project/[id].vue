@@ -4,7 +4,7 @@
       <template v-if="isOwner">
         <div class="mb-8 space-y-4">
           <UAlert
-            v-if="data.isPublished"
+            v-if="data?.isPublished"
             color="green"
             variant="outline"
             :actions="publishedActions"
@@ -23,7 +23,6 @@
                   <UButton
                     v-for="action in publishedActions"
                     :key="action.label"
-                    :ui="{ size: 'xs' }"
                     v-bind="action"
                     @click.stop="action.click" />
                 </div>
@@ -31,7 +30,7 @@
             </template>
           </UAlert>
           <UAlert
-            v-else-if="!data.isPublished"
+            v-else-if="!data?.isPublished"
             color="primary"
             variant="outline"
             :actions="unpublishedActions"
@@ -52,7 +51,6 @@
                   <UButton
                     v-for="action in unpublishedActions"
                     :key="action.label"
-                    :ui="{ size: 'xs' }"
                     v-bind="action"
                     @click.stop="action.click" />
                 </div>
@@ -101,7 +99,7 @@
           Share Project
         </UButton>
         <UButton
-          v-if="data.onboarding"
+          v-if="data?.onboarding"
           color="black"
           size="lg"
           block
@@ -158,7 +156,7 @@
       <ModalProjectShare :project="data" @close="showShare = false" />
     </UModal>
     <USlideover
-      v-if="data.onboarding"
+      v-if="data && 'onboarding' in data"
       v-model="showContributeOnboarding"
       :ui="{ width: 'max-w-xl' }">
       <ProjectSlideoverContribute
@@ -232,7 +230,7 @@ const publishProject = async () => {
     publishIsLoading.value = true;
     await $fetch("/api/project/publish", {
       method: "POST",
-      query: { id: data.value.id },
+      query: { id: data.value!.id },
     })
       .then(() => {
         toast.add({
@@ -240,7 +238,7 @@ const publishProject = async () => {
           description: "Your project is now live.",
           color: "green",
         });
-        data.value.isPublished = true;
+        data.value!.isPublished = true;
         refresh();
       })
       .catch(() => {
@@ -262,7 +260,7 @@ const unpublishProject = async () => {
     unpublishIsLoading.value = true;
     await $fetch("/api/project/unpublish", {
       method: "POST",
-      query: { id: data.value.id },
+      query: { id: data.value!.id },
     })
       .then(() => {
         toast.add({
@@ -270,7 +268,7 @@ const unpublishProject = async () => {
           description: "Project unpublished.",
           color: "green",
         });
-        data.value.isPublished = false;
+        data.value!.isPublished = false;
         refresh();
       })
       .catch(() => {
@@ -322,7 +320,7 @@ const publishedActions = computed(() => [
 ]);
 
 const unpublishedActions = computed(() => [
-  ...(data.value.onboarding
+  ...(data.value?.onboarding
     ? [
         {
           variant: "solid",

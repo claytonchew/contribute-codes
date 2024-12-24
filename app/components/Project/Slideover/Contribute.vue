@@ -46,8 +46,10 @@
 <script setup lang="ts">
 const props = defineProps<{
   onboarding: {
-    renderedOrientationContent: string;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    renderedOrientationContent: Record<string, any>;
     callToActionUrl: string | null;
+    [x: string | number | symbol]: unknown;
   } | null;
 }>();
 

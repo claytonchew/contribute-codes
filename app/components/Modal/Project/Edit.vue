@@ -16,7 +16,10 @@ import type { projectSchema as schema } from "~~/validation/project";
 const toast = useToast();
 
 const props = defineProps<{
-  initialState: z.output<typeof schema> & { id: string };
+  initialState: z.output<typeof schema> & {
+    id: string;
+    [x: string | number | symbol]: unknown;
+  };
 }>();
 
 const emits = defineEmits<{
