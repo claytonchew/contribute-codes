@@ -2,7 +2,7 @@
   <div>
     <div class="py-16">
       <UContainer>
-        <div class="flex flex-wrap justify-between gap-x-4">
+        <div class="flex flex-wrap justify-between gap-4">
           <div>
             <h1 class="text-lg font-semibold sm:text-xl">Your Projects</h1>
             <span
