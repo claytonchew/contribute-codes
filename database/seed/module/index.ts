@@ -179,27 +179,27 @@ class Seed implements SeedModule {
 
   async main() {
     await this.db.transaction(async (tx) => {
-      let { user_version: databaseVersion } = await tx.get<{
-        user_version: number | null;
-      }>(sql`PRAGMA user_version`);
-
-      databaseVersion = databaseVersion || 0;
-      // eslint-disable-next-line no-console
-      console.info("Current database version:", databaseVersion);
-
-      if (this.seedConfig.resetVersion !== undefined) {
-        await tx.run(
-          sql.raw(`PRAGMA user_version = ${this.seedConfig.resetVersion}`),
-        );
-        databaseVersion = this.seedConfig.resetVersion;
-        // eslint-disable-next-line no-console
-        console.info("Reset database version to:", databaseVersion);
-      }
-
       if (
         this.seedRunner.versions &&
         Object.keys(this.seedRunner.versions).length
       ) {
+        let { user_version: databaseVersion } = await tx.get<{
+          user_version: number | null;
+        }>(sql`PRAGMA user_version`);
+
+        databaseVersion = databaseVersion || 0;
+        // eslint-disable-next-line no-console
+        console.info("Current database version:", databaseVersion);
+
+        if (this.seedConfig.resetVersion !== undefined) {
+          await tx.run(
+            sql.raw(`PRAGMA user_version = ${this.seedConfig.resetVersion}`),
+          );
+          databaseVersion = this.seedConfig.resetVersion;
+          // eslint-disable-next-line no-console
+          console.info("Reset database version to:", databaseVersion);
+        }
+
         const sortedVersions = Object.keys(this.seedRunner.versions)
           .map(Number)
           .sort();

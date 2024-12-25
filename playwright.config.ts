@@ -6,9 +6,10 @@ export default defineConfig<ConfigOptions>({
   use: {
     nuxt: {
       rootDir: fileURLToPath(new URL(".", import.meta.url)),
+      dev: true,
     },
   },
-  timeout: 2 * 60 * 1000, // 2 minutes
+  timeout: 1000 * 60 * 5, // 5 minutes
   testDir: "tests/e2e/",
   reporter: process.env.CI
     ? [["github"], ["html", { open: "never" }]]
