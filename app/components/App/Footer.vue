@@ -27,12 +27,6 @@
               class="hover:text-primary underline underline-offset-4"
               target="_blank">
               @claytonchew</ULink
-            >. Check out the
-            <ULink
-              to="https://github.com/claytonchew/contribute-codes"
-              class="hover:text-primary underline underline-offset-4"
-              target="_blank">
-              repo</ULink
             >.
           </span>
         </div>

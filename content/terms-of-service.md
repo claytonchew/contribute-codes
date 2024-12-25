@@ -9,12 +9,12 @@ Contribute.Codes allows users to post non-profit and open-source projects and co
 
 ## Account and Authentication
 
-Account creation on Contribute.Codes is done through GitHub OAuth. Users can explore projects without logging in. However, in order to post or contribute to projects, signing in through GitHub OAuth is required.
+Account creation on Contribute.Codes is done through GitHub OAuth. Users can explore projects without logging in. However, certain features, such as posting and managing projects, signing in through GitHub OAuth is required.
 
 ## Use of Our Services
 
 - **Project Listings:** Registered users can post non-profit or open-source projects on the website. The project listings, including titles, descriptions, repository links, and other details, will be publicly visible.
-- **Volunteering:** Potential contributors can request to volunteer for listed projects. The information provided by the contributor will be shared with the project owner. The project owner may also publish the volunteer's information on the project page.
+- **Volunteering:** Potential contributors can request to volunteer for listed projects. The information provided by the contributor may be shared with the project owner. The project owner may also publish the volunteer's information on the project page.
 - **Accuracy of Information:** You agree to provide accurate, complete, and up-to-date information when submitting projects or volunteering. We are not responsible for the accuracy of the information posted by users.
 
 ## User Responsibilities
