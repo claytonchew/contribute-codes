@@ -10,7 +10,6 @@
           variant="ghost"
           icon="heroicons:x-mark"
           class="-my-1"
-          :loading="loading"
           @click="emits('close')" />
       </div>
     </template>
