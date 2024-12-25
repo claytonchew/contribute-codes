@@ -5,7 +5,7 @@ description: Welcome to Contribute.Codes (“we,” “our,” or “us”). By 
 
 ## Description of Service
 
-Contribute.Codes allows users to post non-profit and open-source projects and connect with volunteers and contributors. By using Contribute.Codes, you agree to only list projects that are in the spirit of non-profit or open-source development.
+Contribute.Codes allows users to post non-profit and open-source projects and connect with contributors. By using Contribute.Codes, you agree to only list projects that are in the spirit of non-profit or open-source development.
 
 ## Account and Authentication
 
@@ -14,14 +14,14 @@ Account creation on Contribute.Codes is done through GitHub OAuth. Users can exp
 ## Use of Our Services
 
 - **Project Listings:** Registered users can post non-profit or open-source projects on the website. The project listings, including titles, descriptions, repository links, and other details, will be publicly visible.
-- **Volunteering:** Potential contributors can request to volunteer for listed projects. The information provided by the contributor may be shared with the project owner. The project owner may also publish the volunteer's information on the project page.
-- **Accuracy of Information:** You agree to provide accurate, complete, and up-to-date information when submitting projects or volunteering. We are not responsible for the accuracy of the information posted by users.
+- **Contributing:** Potential contributors can request to contribute for listed projects. The information provided by the contributor may be shared with the project owner. The project owner may also publish the contributor's information on the project page.
+- **Accuracy of Information:** You agree to provide accurate, complete, and up-to-date information when submitting projects. We are not responsible for the accuracy of the information posted by users.
 
 ## User Responsibilities
 
 - **Listing:** Registered users must ensure that any project listed on Contribute.Codes is non-profit or open-source in nature. The submission of commercial or proprietary projects is strictly prohibited. Contribute.Codes reserves the right to remove any project that does not comply with this requirement.
 - **Lawful Use:** You agree to use Contribute.Codes for lawful purposes only. You may not use the site to post or promote illegal or harmful content.
-- **Respectful Communication:** When interacting with others, whether via project listings or volunteer requests, you agree to communicate respectfully and professionally.
+- **Respectful Communication:** When interacting with others, whether via project listings or contribution, you agree to communicate respectfully and professionally.
 
 ## Prohibited Activities
 

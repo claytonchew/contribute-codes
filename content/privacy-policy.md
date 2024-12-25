@@ -5,20 +5,20 @@ description: Contribute.Codes (“we,” “our,” or “us”) is committed to
 
 ## Information We Collect
 
-- **User-Submitted Information:** When you post a project, contribute to a project, or sign up to volunteer, we may collect your name, email address, and any other details you voluntarily provide (such as project descriptions, repository links, and personal contact information).
+- **User-Submitted Information:** When you sign up or post a project, we may collect your name, email address, and any other details you voluntarily provide (such as project descriptions, repository links, and personal contact information).
 - **Automatic Data Collection:** We may automatically collect certain information about your device, browser type, and usage patterns when you interact with our website.
 
 ## How We Use Your Information
 
 - **Project Listings:** Any information you provide about your project (e.g., project title, description, repository link, etc.) will be publicly displayed on the website. If your project's repository is hosted on GitHub, we may also display additional information from your GitHub repository.
-- **Volunteer Requests:** If you volunteer for a project, your contact information and any additional details you provide may be shared with the project owner. Your information may also be published by the project owner on the project page.
+- **Contributor Requests:** If you contribute for a project, your contact information and any additional details you provide may be shared with the project owner. Your information may also be published by the project owner on the project page.
 - **Communications:** We may use your contact details to send you updates, respond to inquiries, or notify you of relevant project activity.
 - **Improvement of Services:** We use collected data to improve our platform, ensuring it meets user needs and functions smoothly.
 
 ## Sharing Your Information
 
 - **Public Listings:** Information submitted as part of a project listing (e.g., title, description, contributor names) will be visible to the public.
-- **Volunteer Contact Details:** When a volunteer expresses interest in a project, their information may be shared with the respective project owner.
+- **Contributor Contact Details:** When a contributor expresses interest in a project, their information may be shared with the respective project owner.
 - **Service Providers:** We may share your data with trusted third parties who assist us in maintaining and operating the website (e.g., hosting providers), but these parties are obligated to keep your data secure.
 - **Legal Requirements:** We may disclose your information if required to comply with legal obligations or to protect the safety and rights of our users.
 
