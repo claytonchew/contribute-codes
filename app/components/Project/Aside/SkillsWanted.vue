@@ -10,7 +10,7 @@
         size="xs"
         @click="editSkillsModal = true" />
     </div>
-    <div class="flex flex-wrap gap-2">
+    <div class="flex flex-wrap gap-1">
       <UButton
         v-for="skill in props.data.skills"
         :key="skill"

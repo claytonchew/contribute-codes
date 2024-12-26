@@ -30,7 +30,7 @@
           :options="skills"
           :loading="skillsIsLoading"
           :popper="{ placement: 'top' }" />
-        <div class="mt-2">
+        <div class="mt-2 flex flex-wrap gap-1">
           <UButton
             v-for="(skill, index) in state.skills"
             :key="skill"
@@ -38,7 +38,6 @@
             color="white"
             :label="skill"
             icon="heroicons:x-mark"
-            class="ml-1"
             trailing
             :ui="{
               rounded: 'rounded-full',
