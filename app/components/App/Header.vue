@@ -107,7 +107,7 @@ const toast = useToast();
 const userLinks = [
   [
     {
-      label: "Projects",
+      label: "My Projects",
       icon: "heroicons:document-text",
       to: "/me/projects",
     },
