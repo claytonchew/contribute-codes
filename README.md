@@ -1,75 +1,85 @@
-# Nuxt 3 Minimal Starter
+# Contribute.Codes
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+Contribute.Codes is a platform designed to connect open-source and non-profit projects with passionate contributors and volunteers from around the world. We believe that coding and collaboration have the power to drive positive change, and our mission is to provide a space where projects seeking help can easily connect with people who want to make a difference.
 
-## Setup
+## Making a Commit
 
-Make sure to install the dependencies:
+This project is setup with pre-commit hooks to ensure that the codebase is consistent and free of errors. On each commit, the following checks are performed:
 
-```bash
-# npm
-npm install
+- Linting – ensures that the codebase adheres to the coding standards.
+- Formatting – ensures that the codebase is formatted correctly.
+- Tests – ensures that the codebase is functioning as expected.
+- Commit message – ensures that the commit message follows the conventional commit format.
 
-# pnpm
-pnpm install
+You may find that the commit may take longer than usual. This is normal as the checks are being performed.
 
-# yarn
-yarn install
+## Development
 
-# bun
-bun install
-```
+Pre-requisites:
 
-## Development Server
+- Node.js – at least version v20 or higher.
+- Docker – this can be either Docker Desktop or Orbstack.
+- A GitHub OAuth Client ID and Secret, refer to [this guide](https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/creating-an-oauth-app) on getting them. When creating the OAuth app, the callback URL should be `http://localhost:3000/auth/github`.
 
-Start the development server on `http://localhost:3000`:
-
-```bash
-# npm
-npm run dev
-
-# pnpm
-pnpm run dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
-```
-
-## Production
-
-Build the application for production:
+Copy the `.env.example` file to `.env` and fill in the necessary values.
 
 ```bash
-# npm
-npm run build
-
-# pnpm
-pnpm run build
-
-# yarn
-yarn build
-
-# bun
-bun run build
+cp .env.example .env
 ```
 
-Locally preview production build:
+At minimum, you will need to provide both `NUXT_OAUTH_GITHUB_CLIENT_ID` and `NUXT_OAUTH_GITHUB_CLIENT_SECRET` in the `.env` file. You can leave the rest as default.
+
+To quickly get started, you can run this command:
 
 ```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm run preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
+npm run d
 ```
 
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+The above command does the following:
+
+- Performs dependencies install `npm install`
+- Starts up dependendent services (libsql, inbucket, etc.) `npm dx:up`
+- Applies database migration `npm run db:migrate`
+- Starts the development server `npm run dev`
+
+You can run the above sub-commands individually if you prefer.
+
+The following available commands are as follows:
+
+### `npm dx:up`
+
+Starts dependent services. (libsql, inbucket, etc.)
+
+### `npm dx:down`
+
+Stops dependent services.
+
+### `npm db:migrate`
+
+Applies database migrations.
+
+### `npm db:seed`
+
+Seeds the database with initial data. They can be re-run without any side effects.
+
+### `npm db:studio`
+
+Launches Drizzle Studio – a GUI for managing the database.
+
+### `npm run dev`
+
+Starts the development server.
+
+## Testing
+
+To run the unit tests, you can use the following command:
+
+```bash
+npm run test:unit
+```
+
+To run the end-to-end tests, you can use the following command:
+
+```bash
+npm run test:e2e
+```

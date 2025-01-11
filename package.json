@@ -5,6 +5,10 @@
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
+    "d": "npm run dx && npm run dev",
+    "dx": "npm install && npm run dx:up && npm run db:migrate && npm run db:seed",
+    "dx:up": "docker compose -f ./docker-compose.dev.yaml up -d",
+    "dx:down": "docker compose -f ./docker-compose.dev.yaml down",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
@@ -80,5 +84,8 @@
     "typescript": "^5.6.2",
     "vitest": "^2.1.1",
     "vue-tsc": "^2.1.6"
+  },
+  "engines": {
+    "node": ">=20.0.0"
   }
 }
