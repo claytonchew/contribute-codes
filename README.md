@@ -40,6 +40,7 @@ The above command does the following:
 - Performs dependencies install `npm install`
 - Starts up dependent services (libsql, inbucket, etc.) `npm dx:up`
 - Applies database migration `npm run db:migrate`
+- Seeds the database with initial data `npm run db:seed`
 - Starts the development server `npm run dev`
 
 You can run the above sub-commands individually if you prefer.
