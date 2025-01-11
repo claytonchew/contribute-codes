@@ -19,7 +19,7 @@ Pre-requisites:
 
 - Node.js – at least version v20 or higher.
 - Docker – this can be either Docker Desktop or Orbstack.
-- A GitHub OAuth Client ID and Secret, refer to [this guide](https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/creating-an-oauth-app) on getting them. When creating the OAuth app, the callback URL should be `http://localhost:3000/auth/github`.
+- GitHub OAuth Client ID and Secret, refer to [this guide](https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/creating-an-oauth-app) on getting them. When creating the OAuth app, the callback URL should be `http://localhost:3000/auth/github`.
 
 Copy the `.env.example` file to `.env` and fill in the necessary values.
 
@@ -38,7 +38,7 @@ npm run d
 The above command does the following:
 
 - Performs dependencies install `npm install`
-- Starts up dependendent services (libsql, inbucket, etc.) `npm dx:up`
+- Starts up dependent services (libsql, inbucket, etc.) `npm dx:up`
 - Applies database migration `npm run db:migrate`
 - Starts the development server `npm run dev`
 
