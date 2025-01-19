@@ -72,6 +72,9 @@
     "name": "CI/CD"
   },
   {
+    "name": "CSS"
+  },
+  {
     "name": "CPython"
   },
   {
@@ -226,6 +229,9 @@
   },
   {
     "name": "Hugging Face"
+  },
+  {
+    "name": "HTML"
   },
   {
     "name": "IBM DB2"

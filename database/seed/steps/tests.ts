@@ -4,6 +4,7 @@ import userData from "~~/database/seed/data/tests/user.json";
 import oAuthAccountData from "~~/database/seed/data/tests/oauth_account.json";
 import projectData from "~~/database/seed/data/tests/project.json";
 import projectSkillData from "~~/database/seed/data/tests/project_skill.json";
+import projectOnboardingData from "~~/database/seed/data/tests/project_onboarding.json";
 
 export default {
   seed: async (tx) => {
@@ -48,6 +49,7 @@ export default {
           snippet: data.snippet,
           repositoryUrl: data.repository_url,
           projectUrl: data.project_url,
+          isPublished: data.is_published,
           ownerId: data.owner_id,
         })),
       )
@@ -61,6 +63,19 @@ export default {
           skill: data.skill,
           createdAt: new Date(data.created_at * 1000),
           updatedAt: new Date(data.updated_at * 1000),
+        })),
+      )
+      .onConflictDoNothing()
+      .run();
+    await tx
+      .insert(tables.project.projectOnboarding)
+      .values(
+        projectOnboardingData.map((data) => ({
+          projectId: data.project_id,
+          createdAt: new Date(data.created_at * 1000),
+          updatedAt: new Date(data.updated_at * 1000),
+          orientationContent: data.orientation_content,
+          callToActionUrl: data.call_to_action_url,
         })),
       )
       .onConflictDoNothing()

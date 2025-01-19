@@ -14,4 +14,9 @@ export default <Partial<Config>>{
       },
     },
   },
+  safelist: [
+    // used in dynamic contents
+    "dark:block",
+    "dark:hidden",
+  ],
 };
