@@ -16,7 +16,11 @@
           label: 'No projects added by you yet.',
         }"
         :ui="{
-          emptyState: { wrapper: 'py-2', icon: 'mb-1' },
+          emptyState: {
+            wrapper: 'py-8',
+            icon: 'mb-2',
+            label: 'text-gray-500 dark:text-gray-400',
+          },
         }">
         <template #createdAt-data="{ row }">
           <span>
